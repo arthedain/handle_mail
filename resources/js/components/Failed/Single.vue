@@ -1,0 +1,151 @@
+<template>
+    <div>
+        <div class="flex mb-6">
+            <router-link :to="{name: 'handle-mail-failed'}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="#38b2ac" class="heroicon-ui" d="M5.41 11H21a1 1 0 0 1 0 2H5.41l5.3 5.3a1 1 0 0 1-1.42 1.4l-7-7a1 1 0 0 1 0-1.4l7-7a1 1 0 0 1 1.42 1.4L5.4 11z"/>
+                </svg>
+            </router-link>
+            <p class="text-2xl ml-2 mr-2">/</p>
+            <router-link :to="{name: 'handle-mail'}" class="breadcrumb">
+                <h3 class="text-90 font-normal mt-1 breadcrumb ">
+                    Handle mails
+                </h3>
+            </router-link>
+            <p class="text-2xl ml-2 mr-2">/</p>
+            <router-link :to="{name: 'handle-mail-failed'}" class="breadcrumb">
+                <h3 class="text-90 font-normal mt-1 breadcrumb ">
+                    Failed mails
+                </h3>
+            </router-link>
+            <p class="text-2xl ml-2 mr-2">/</p>
+            <heading class="">
+                Failed mail
+            </heading>
+            <button @click="openModal" class="btn btn-default btn-teal" style="margin-left: auto">Send mail</button>
+                    <modal
+                        v-if="modalOpen"
+                        @confirm="confirmModal"
+                        @close="closeModal"
+                        :method="resendMail"
+                    />
+        </div>
+        <card class="mb-6 py-3 px-6">
+            <div class="flex border-b border-40">
+                <div class="w-1/4 py-4">
+                    <h4 class="font-normal text-80">
+                        {{ __('id') }}
+                    </h4>
+                </div>
+                <div class="w-3/4 py-4 break-words">
+                    <p class="text-90">
+                        {{ mail.id }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex border-b border-40">
+                <div class="w-fill py-4 break-words">
+                    <div v-html="view"></div>
+                </div>
+            </div>
+
+            <div class="flex border-b border-40">
+                <div class="w-1/4 py-4 ">
+                    <h4 class="font-normal text-80">
+                        {{ __('failed_at') }}
+                    </h4>
+                </div>
+                <div class="w-3/4 py-4 break-words">
+                    <p class="text-90">
+                        {{ mail.failed_at }}
+                    </p>
+                </div>
+            </div>
+            <div class="flex">
+                <div class="w-1/4 py-4">
+                    <h4 class="font-normal text-80">
+                        {{ __('exception') }}
+                    </h4>
+                </div>
+                <div class="w-3/4 py-4 break-words">
+                    <div class="leading-normal whitespace-pre-wrap" v-if="showText">
+                        {{ mail.exception }}
+                    </div>
+                    <a aria-role="button" @click="toggleText()" :class="['cursor-pointer dim inline-block teal font-bold', showText ? 'mt-6' : '']">
+                        {{ showText ? __('Hide Content') : __('Show Content') }}
+                    </a>
+                </div>
+            </div>
+        </card>
+    </div>
+</template>
+
+<script>
+    import Modal from "../templates/Modal";
+
+    export default {
+        name: "Single",
+        components: {
+          Modal
+        },
+        props: ['id'],
+        data(){
+            return {
+                mail: [],
+                content: [],
+                view: '',
+                modalOpen: false,
+                textOpen: false,
+                showText: false,
+            }
+        },
+        mounted() {
+            axios.get('/nova-vendor/handle-mail/failed_single/'+this.id).then((response)=>{
+                this.mail = response.data.mail;
+                this.content = response.data.content;
+                this.view = response.data.view;
+            })
+        },
+        methods: {
+            openModal() {
+                this.modalOpen = true;
+            },
+            confirmModal() {
+                this.modalOpen = false;
+            },
+            closeModal() {
+                this.modalOpen = false;
+            },
+            toggleText() {
+                this.showText = !this.showText;
+            },
+            resendMail() {
+                axios.post('/nova-vendor/handle-mail/resend_mail', {'id':this.id}).then((response) => {
+                    this.$toasted.show(this.__("Success"), {
+                        type: "success"
+                    });
+                }).catch((error) => {
+                    this.$toasted.show(this.__("Error"), { type: "error" });
+                });
+            }
+
+        }
+    }
+</script>
+
+<style scoped>
+    .btn-teal{
+        background-color: #38b2ac;
+        color: #ffffff;
+    }
+    .teal{
+        color: #38b2ac;
+    }
+    .breadcrumb{
+        text-decoration: none;
+    }
+    .breadcrumb:hover{
+        color: #38b2ac;
+    }
+</style>
