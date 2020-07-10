@@ -39,7 +39,7 @@ class HandleMailJob implements ShouldQueue
      */
     public function handle()
     {
-        $mail = config('handle_mail', HandleMail::class);
+        $mail = config('handle_mail.mail', HandleMail::class);
 
 
         Mail::to($this->email)->send(new $mail($this->subject, $this->content));
