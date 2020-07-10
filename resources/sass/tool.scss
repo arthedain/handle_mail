@@ -1,1 +1,59 @@
-// Nova Tool CSS
+.teal{
+    color: #38b2ac;
+}
+.teal-hover:hover{
+    color: #38b2ac;
+}
+canvas{
+    max-width: 1550px;
+}
+.ve-line{
+    max-width: 1550px;
+}
+.failed-card{
+    background-color: #F56565;
+}
+.failed-card:hover{
+    background-color: #FC8181;
+}
+.link{
+    position: relative;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+}
+.link:after{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    content: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path class="heroicon-ui" d="M19 6.41L8.7 16.71a1 1 0 1 1-1.4-1.42L17.58 5H14a1 1 0 0 1 0-2h6a1 1 0 0 1 1 1v6a1 1 0 0 1-2 0V6.41zM17 14a1 1 0 0 1 2 0v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2h5a1 1 0 0 1 0 2H5v12h12v-5z"/></svg>');
+}
+.mail-search{
+    width: 400px;
+    /*background-color: #eef1f4;*/
+    /*border: 1px solid var(--80);*/
+}
+.mail-search:focus{
+    border: 2px solid #38b2ac;
+}
+.btn-teal{
+    background-color: #38b2ac;
+    color: #ffffff;
+}
+.breadcrumb{
+    text-decoration: none;
+}
+.breadcrumb:hover{
+    color: #38b2ac;
+}
+.preloader_main{
+    position: absolute;
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 1568px;
+    max-height: 1259px;
+    display: flex;
+    height: 200%;
+    justify-content: center;
+    align-items: center;
+}

@@ -21,9 +21,10 @@ use Illuminate\Support\Facades\Route;
 /*
  * Tool
  */
-Route::get('/mails', 'Arthedain\HandleMail\Http\Controllers\TableController@getMails');
+Route::get('/mails', 'Arthedain\HandleMail\Http\Controllers\ToolController@getMails');
 Route::get('/chart', 'Arthedain\HandleMail\Http\Controllers\ToolController@getChartData');
 Route::get('/failed_count', 'Arthedain\HandleMail\Http\Controllers\ToolController@failed');
+Route::post('/delete/{id}', 'Arthedain\HandleMail\Http\Controllers\ToolController@delete');
 
 /*
  * Single mail
@@ -36,3 +37,4 @@ Route::get('/single/{id}', 'Arthedain\HandleMail\Http\Controllers\SingleControll
 Route::get('/failed_list', 'Arthedain\HandleMail\Http\Controllers\FailedController@get');
 Route::get('/failed_single/{id}', 'Arthedain\HandleMail\Http\Controllers\FailedController@single');
 Route::post('/resend_mail/{id?}', 'Arthedain\HandleMail\Http\Controllers\FailedController@retry');
+Route::post('/delete_failed/{id}', 'Arthedain\HandleMail\Http\Controllers\FailedController@delete');

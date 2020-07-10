@@ -1,5 +1,12 @@
 <template>
     <div>
+        <modal
+            v-if="modalOpen"
+            @confirm="confirmModal"
+            @close="closeModal"
+            :method="resendMail"
+            :title="modalTitle"
+        />
         <div class="flex mb-6">
             <router-link :to="{name: 'handle-mail-failed'}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -22,15 +29,17 @@
             <heading class="">
                 Failed mail
             </heading>
-            <button @click="openModal" class="btn btn-default btn-teal" style="margin-left: auto">Send mail</button>
-                    <modal
-                        v-if="modalOpen"
-                        @confirm="confirmModal"
-                        @close="closeModal"
-                        :method="resendMail"
-                    />
+            <div class="flex justify-center" style="margin-left: auto">
+                <button @click="resendMail" class="btn btn-default btn-teal">Send mail</button>
+                <button @click="openModal" class="btn btn-default mr-2 btn-danger ml-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="fill-current mt-1"><path d="M8 6V4c0-1.1.9-2 2-2h4a2 2 0 0 1 2 2v2h5a1 1 0 0 1 0 2h-1v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8H3a1 1 0 1 1 0-2h5zM6 8v12h12V8H6zm8-2V4h-4v2h4zm-4 4a1 1 0 0 1 1 1v6a1 1 0 0 1-2 0v-6a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v6a1 1 0 0 1-2 0v-6a1 1 0 0 1 1-1z"/></svg>
+                </button>
+            </div>
         </div>
-        <card class="mb-6 py-3 px-6">
+        <card class="w-full" v-if="loading">
+            <preloader></preloader>
+        </card>
+        <card class="mb-6 py-3 px-6" v-if="!loading">
             <div class="flex border-b border-40">
                 <div class="w-1/4 py-4">
                     <h4 class="font-normal text-80">
@@ -82,12 +91,14 @@
 </template>
 
 <script>
-    import Modal from "../templates/Modal";
+    import Modal from "../templates/Modal"
+    import Preloader from '../templates/Preloader'
 
     export default {
         name: "Single",
         components: {
-          Modal
+          Modal,
+          Preloader
         },
         props: ['id'],
         data(){
@@ -98,6 +109,8 @@
                 modalOpen: false,
                 textOpen: false,
                 showText: false,
+                modalTitle: 'LongTitle',
+                loading: true,
             }
         },
         mounted() {
@@ -105,6 +118,7 @@
                 this.mail = response.data.mail;
                 this.content = response.data.content;
                 this.view = response.data.view;
+                this.loading = false;
             })
         },
         methods: {
@@ -125,27 +139,28 @@
                     this.$toasted.show(this.__("Success"), {
                         type: "success"
                     });
+                    this.$router.push({name:'handle-mail-failed'});
                 }).catch((error) => {
                     this.$toasted.show(this.__("Error"), { type: "error" });
                 });
-            }
+            },
+            deleteJob(){
+                axios.post('/nova-vendor/handle-mail/delete_failed', {'id':this.id}).then((response) => {
+                    this.$toasted.show(this.__("Success"), {
+                        type: "success"
+                    });
+                    this.$router.push({name:'handle-mail-failed'});
+                }).catch((error) => {
+                    this.$toasted.show(this.__("Error"), { type: "error" });
+                });
+            },
+
+
 
         }
     }
 </script>
 
 <style scoped>
-    .btn-teal{
-        background-color: #38b2ac;
-        color: #ffffff;
-    }
-    .teal{
-        color: #38b2ac;
-    }
-    .breadcrumb{
-        text-decoration: none;
-    }
-    .breadcrumb:hover{
-        color: #38b2ac;
-    }
+
 </style>

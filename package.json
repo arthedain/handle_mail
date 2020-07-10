@@ -17,6 +17,7 @@
         "echarts": "^4.8.0",
         "v-charts": "^1.19.0",
         "vue": "^2.5.0",
-        "vue-echarts": "^5.0.0-beta.0"
+        "vue-echarts": "^5.0.0-beta.0",
+        "vue-spinner": "^1.0.3"
     }
 }

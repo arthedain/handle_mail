@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace Arthedain\HandleMail\Jobs;
 
 use App\Mail\HandleMail;
 use Illuminate\Bus\Queueable;
@@ -14,18 +14,20 @@ class HandleMailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $subject = '';
-    protected $content = '';
+    public $subject = '';
+    public $content = '';
+    public $id;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($subject, $content)
+    public function __construct($subject, $content, $id)
     {
         $this->subject = $subject;
         $this->content = $content;
+        $this->id = $id;
     }
 
     /**
@@ -35,6 +37,12 @@ class HandleMailJob implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to('test@mail.com')->send(new HandleMail($this->subject, $this->content));
+        $mail = config('handle_mail', Mail::class);
+
+        $emails = config('handle_mail.email', ['admin@mail.com']);
+
+        foreach($emails as $email){
+            (new $mail())->to($email)->send(new HandleMail($this->subject, $this->content));
+        }
     }
 }

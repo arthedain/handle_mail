@@ -2,8 +2,8 @@
 
 namespace Arthedain\HandleMail\Http\Controllers;
 
-use App\Models\FailedJobs;
-use App\Models\HandleMail;
+use Arthedain\HandleMail\Models\FailedJobs;
+use Arthedain\HandleMail\Models\HandleMail;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -12,8 +12,8 @@ use DB;
 class ToolController
 {
     public function getChartData(Request $request){
-        $data = HandleMail::where('created_at', '>=', Carbon::today()->subDays(30))->orderBy('created_at')->get();
-        $data_failed = FailedJobs::where('failed_at', '>=', Carbon::today()->subDays(30))->orderBy('failed_at')->get();
+        $data = app('HandleMailModel')->where('created_at', '>=', Carbon::today()->subDays(30))->orderBy('created_at')->get();
+        $data_failed = app('FailedJobsModel')->where('failed_at', '>=', Carbon::today()->subDays(30))->where('queue', 'handle-mail')->orderBy('failed_at')->get();
 
         $period = CarbonPeriod::create(Carbon::now()->subDays(30), Carbon::now());
 
@@ -48,8 +48,18 @@ class ToolController
         return $collection;
     }
 
+    public function getMails(){
+        $mail = app('HandleMailModel')->orderBy('id', 'desc')->paginate(20);
+        return response()->json($mail->toArray());
+    }
+
     public function failed(){
-        $count = FailedJobs::all()->count();
+        $count = app('FailedJobsModel')->where('queue', 'handle-mail')->get()->count();
         return response()->json($count);
+    }
+
+    public function delete(Request $request){
+        app('HandleMailModel')->where('id', $request->id)->delete();
+        return response('', 200);
     }
 }

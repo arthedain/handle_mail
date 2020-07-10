@@ -13,7 +13,7 @@
             class="bg-white rounded-lg shadow-lg overflow-hidden"
         >
             <div>
-                <heading :level="2" class="border-b border-40 py-8 px-8">{{ __("Send mail") }}</heading>
+                <heading :level="2" class="border-b border-40 py-8 px-8">{{ __(title) }}</heading>
 
                 <p class="text-80 px-8 my-8">
                     {{ __('Are you sure you want to run this action?') }}
@@ -56,6 +56,7 @@
             selectedResources: { type: [Array, String], required: true },
             errors: { type: Object, required: true },
             method: { type: Function },
+            title: {type: String},
         },
         /**
          * Mount the component.
@@ -97,8 +98,5 @@
 </script>
 
 <style>
-    .btn-teal{
-        background-color: #38b2ac;
-        color: #ffffff;
-    }
+
 </style>
