@@ -17,17 +17,19 @@ class HandleMailJob implements ShouldQueue
     public $subject = '';
     public $content = '';
     public $id;
+    public $email;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($subject, $content, $id)
+    public function __construct($subject, $content, $email, $id = 0)
     {
         $this->subject = $subject;
         $this->content = $content;
         $this->id = $id;
+        $this->email = $email;
     }
 
     /**
@@ -39,10 +41,7 @@ class HandleMailJob implements ShouldQueue
     {
         $mail = config('handle_mail', HandleMail::class);
 
-        $emails = config('handle_mail.email', ['admin@mail.com']);
 
-        foreach($emails as $email){
-            Mail::to($email)->send(new $mail($this->subject, $this->content));
-        }
+        Mail::to($this->email)->send(new $mail($this->subject, $this->content));
     }
 }

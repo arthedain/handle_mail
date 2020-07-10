@@ -4,12 +4,17 @@ php artisan vendor:publish --provider="Arthedain\HandleMail\ToolServiceProvider"
 
 ```$xslt
 php artisan queue:table
+php artisan queue:failed-table
 
 .env
 QUEUE_CONNECTION=database
 
 php artisan migrate
 ```
+
+````
+$schedule->command('queue:work --stop-when-empty --queue=handle-mail')->everyFiveMinutes()
+````
 
 ````
 "Name": "Name",
