@@ -41,11 +41,11 @@
                                                 <h3>
                                                     <table style="width: 500px;">
                                                         <tbody>
-                                                        @foreach($content as $item)
+                                                        @foreach($content as $key => $item)
                                                             <tr>
                                                                 <td align='right'>{{ __($key) }}</td>
                                                                 <td>:</td>
-                                                                <td>{{ $val }}</td>
+                                                                <td>{{ $item }}</td>
                                                             </tr>
                                                         @endforeach
                                                         </tbody>
