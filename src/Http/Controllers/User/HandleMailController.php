@@ -23,7 +23,7 @@ class HandleMailController
         $emails = config('handle_mail.email', ['admin@mail.com']);
 
         foreach($emails as $email) {
-            (new $job($subject, $content, $email, $model->id))->dispatch($subject, $content, $model->id)->onQueue('handle-mail');
+            (new $job($subject, $content, $email, $model->id))->dispatch($subject, $content, $email, $model->id)->onQueue('handle-mail');
         }
 
         if($callback){
