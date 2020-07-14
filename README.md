@@ -79,14 +79,14 @@ $schedule->command('queue:work --stop-when-empty --queue=handle-mail')->everyFiv
 ````
 ------------------
 
-###View
+### View
 After publish default files you can change mail template in ```resource/views/vendor/handle-mail/mail.blade.php```
 
 ------------------
 
 
 
-###Tool localization
+### Tool localization
 
 Add this lines to your nova localization file:
 ````
