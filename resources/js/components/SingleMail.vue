@@ -82,7 +82,7 @@
             return{
                 mail: [],
                 modalOpen: false,
-                modalTitle: 'LongTitle',
+                modalTitle: 'Delete email',
                 loading: true,
             }
         },

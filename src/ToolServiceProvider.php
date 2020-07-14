@@ -2,7 +2,6 @@
 
 namespace Arthedain\HandleMail;
 
-use App\Nova\Metrics\TestTrend;
 use Arthedain\HandleMail\Models\FailedJobs;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;

@@ -3,8 +3,6 @@
 
 namespace Arthedain\HandleMail\Http\Controllers;
 
-
-use App\Models\HandleMail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 

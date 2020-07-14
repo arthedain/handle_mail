@@ -2,12 +2,9 @@
 
 namespace Arthedain\HandleMail\Http\Controllers;
 
-use Arthedain\HandleMail\Models\FailedJobs;
-use Arthedain\HandleMail\Models\HandleMail;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
-use DB;
 
 class ToolController
 {

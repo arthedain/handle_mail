@@ -42,7 +42,7 @@
                         &nbsp;
                     </th>
                     <th class="text-left">ID</th>
-                    <th class="text-left">{{__('Date')}}</th>
+                    <th class="text-left">{{__('failed_at')}}</th>
                     <th class="text-left"></th>
                 </tr>
                 </thead>
