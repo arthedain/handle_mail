@@ -43,7 +43,7 @@ QUEUE_CONNECTION=database
 ``` 
 Usage
 ------
-Enter emails in ``config/handle_mail.php`` to send mail from the site
+Enter emails in ``config/handle-mail.php`` to send mail from the site
 ```$xslt
 'email' => [
     //

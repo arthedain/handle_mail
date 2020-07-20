@@ -35,7 +35,7 @@ class ToolServiceProvider extends ServiceProvider
             __DIR__.'/public/assets/handle-mail.js' => public_path('/assets/handle-mail.js')
         ], 'script');
         $this->publishes([
-            __DIR__.'/../config/handle_mail.php' => config_path('handle-mail.php')
+            __DIR__.'/../config/handle-mail.php' => config_path('handle-mail.php')
         ], 'config');
         $this->publishes([
             __DIR__.'/public/migrations/2020_06_30_080754_create_handle_mails_table.php' => database_path('/migrations/2020_06_30_080754_create_handle_mails_table.php')
@@ -44,7 +44,7 @@ class ToolServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/public/view/mail.blade.php' => resource_path('/views/vendor/handle-mail/mail.blade.php'),
             __DIR__.'/public/assets/handle-mail.js' => public_path('/assets/handle-mail.js'),
-            __DIR__.'/../config/handle_mail.php' => config_path('handle-mail.php'),
+            __DIR__.'/../config/handle-mail.php' => config_path('handle-mail.php'),
             __DIR__.'/public/migrations/2020_06_30_080754_create_handle_mails_table.php' => database_path('/migrations/2020_06_30_080754_create_handle_mails_table.php'),
         ], 'default');
 
@@ -54,8 +54,8 @@ class ToolServiceProvider extends ServiceProvider
             $this->routes();
         });
 
-        $this->app->singleton('HandleMailModel', config('handle_mail.models.handle_mail', HandleMail::class));
-        $this->app->singleton('FailedJobsModel', config('handle_mail.models.failed_jobs', FailedJobs::class));
+        $this->app->singleton('HandleMailModel', config('handle-mail.models.handle_mail', HandleMail::class));
+        $this->app->singleton('FailedJobsModel', config('handle-mail.models.failed_jobs', FailedJobs::class));
 
 
         Nova::serving(function (ServingNova $event) {
@@ -104,7 +104,7 @@ class ToolServiceProvider extends ServiceProvider
     public function updateMailStatus($event, $status){
         if($event->job->getQueue()){
             $mail_id = unserialize($event->job->payload()['data']['command'])->id;
-            \DB::table('handle_mails')->where('id', $mail_id)->update([
+            \DB::table('handle-mails')->where('id', $mail_id)->update([
                 'status' => $status
             ]);
         }

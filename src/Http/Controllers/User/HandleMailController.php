@@ -18,9 +18,9 @@ class HandleMailController
 
         $model = $this->saveToDB($request);
 
-        $job = config('handle_mail.job', HandleMailJob::class);
+        $job = config('handle-mail.job', HandleMailJob::class);
 
-        $emails = config('handle_mail.email', ['admin@mail.com']);
+        $emails = config('handle-mail.email', ['admin@mail.com']);
 
         foreach($emails as $email) {
             (new $job($subject, $content, $email, $model->id))->dispatch($subject, $content, $email, $model->id)->onQueue('handle-mail');
