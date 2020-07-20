@@ -7,9 +7,18 @@ Installation
 ```
 composer require arthedain/handle-mail
 ```
-After installation publish default files
+Register tool in NovaServiceProvider
+
+```
+public function tools()
+{
+     new HandleMail
+}
+```
+
+After registering publish default files
 ````
-php artisan vendor:publish --provider="ArthedainHandleMail\ToolServiceProvider" --tag="default"
+php artisan vendor:publish --provider="Arthedain\HandleMail\ToolServiceProvider" --tag="default"
 ````
 > Or you can publish files by tag:
 > * job
