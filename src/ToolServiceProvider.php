@@ -104,7 +104,7 @@ class ToolServiceProvider extends ServiceProvider
     public function updateMailStatus($event, $status){
         if($event->job->getQueue()){
             $mail_id = unserialize($event->job->payload()['data']['command'])->id;
-            \DB::table('handle-mails')->where('id', $mail_id)->update([
+            \DB::table('handle_mails')->where('id', $mail_id)->update([
                 'status' => $status
             ]);
         }
