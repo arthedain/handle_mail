@@ -42,6 +42,10 @@ class HandleMailController
         $inputs = array_filter($request->only(['phone', 'name', 'email', 'text', 'page']));
         $data = array_filter($request->except(['_token', 'phone', 'name', 'email', 'text', 'page']));
 
+        // if(!isset($inputs['page'])){
+        //     $inputs['page'] = explode('?', $request->fullUrl())[0];
+        // }
+
         if(empty($data)){
             $data = null;
         }
