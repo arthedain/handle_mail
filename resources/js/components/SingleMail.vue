@@ -48,7 +48,7 @@
                     </p>
                 </div>
                 <div class="w-3/4 py-4 break-words" v-if="typeof value === 'object'">
-                    <div class="flex w-3/4 py-4 break-words border-b border-40" v-for="(v, k) in value">
+                    <div class="flex w-3/4 py-4 break-words border-b border-40" v-for="(v, k) in value" v-if="k !== 'ip_info'">
                         <div class="w-1/4 py-4">
                             <h4 class="font-normal text-80">
                                 {{ __(k) }}
@@ -60,6 +60,20 @@
                             </p>
                         </div>
                     </div>
+                </div>
+            </div>
+        </card>
+        <card class="mb-6 py-3 px-6" v-if="!loading">
+            <div class="flex border-b border-40" v-for="(value, key)  in mail.data.ip_info" :key="key" v-if="key !== 'driver' && value">
+                <div class="w-1/4 py-4">
+                    <h4 class="font-normal text-80">
+                        {{ __(key) }}
+                    </h4>
+                </div>
+                <div class="w-3/4 py-4 break-words" v-if="typeof value != 'object'">
+                    <p class="text-90" v-if="key !== 'status'">
+                        {{ value }}
+                    </p>
                 </div>
             </div>
         </card>

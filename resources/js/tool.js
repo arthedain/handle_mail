@@ -23,5 +23,10 @@ Nova.booting((Vue, router, store) => {
         component: require('./components/Failed/Single'),
         props: true,
     },
+      {
+        name: 'handle-mail-metrika-index',
+        path: '/handle-mail/metrika',
+        component: require('./components/Metriks/Index'),
+    },
   ])
 })

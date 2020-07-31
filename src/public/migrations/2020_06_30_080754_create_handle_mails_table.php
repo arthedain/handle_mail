@@ -15,7 +15,7 @@ class CreateHandleMailsTable extends Migration
     {
         Schema::create('handle_mails', function (Blueprint $table) {
             $table->id();
-            $table->string('page');
+            $table->text('page');
             $table->string('name')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();

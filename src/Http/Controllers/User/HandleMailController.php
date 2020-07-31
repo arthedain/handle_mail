@@ -4,6 +4,7 @@ namespace Arthedain\HandleMail\Http\Controllers\User;
 
 use Arthedain\HandleMail\Jobs\HandleMailJob;
 use Illuminate\Http\Request;
+use Stevebauman\Location\Location;
 
 class HandleMailController
 {
@@ -50,8 +51,12 @@ class HandleMailController
             $data = null;
         }
 
+        $ip = $request->ip();
+
+        $data['ip_info'] = (new Location())->get($ip);
+
         $inputs['data'] = $data;
-        $inputs['ip'] = $request->ip();
+        $inputs['ip'] = $ip;
         $inputs['status'] = 'process';
 
         $model = app('HandleMailModel')->create($inputs);

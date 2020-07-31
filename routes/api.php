@@ -38,3 +38,8 @@ Route::get('/failed_list', 'Arthedain\HandleMail\Http\Controllers\FailedControll
 Route::get('/failed_single/{id}', 'Arthedain\HandleMail\Http\Controllers\FailedController@single');
 Route::post('/resend_mail/{id?}', 'Arthedain\HandleMail\Http\Controllers\FailedController@retry');
 Route::post('/delete_failed/{id}', 'Arthedain\HandleMail\Http\Controllers\FailedController@delete');
+
+/*
+ * Metrika
+ */
+Route::get('/get_map_data', 'Arthedain\HandleMail\Http\Controllers\MetrikaController@getMapData');
