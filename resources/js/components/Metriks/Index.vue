@@ -22,15 +22,19 @@
             <div id="chartdiv" class="map">
             </div>
         </card>
-        <div class="relative z-50 w-full max-w-xs mt-4 mb-2">
-            <div class="relative">
-                <div class="relative h-9 flex-no-shrink mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" aria-labelledby="search" role="presentation" class="fill-current absolute search-icon-center ml-3 text-80"><path fill-rule="nonzero" d="M14.32 12.906l5.387 5.387a1 1 0 0 1-1.414 1.414l-5.387-5.387a8 8 0 1 1 1.414-1.414zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path></svg>
-                    <input type="search" v-model="search" placeholder="Нажмите / для поиска" class="appearance-none form-search w-search pl-search shadow mail-search">
-                </div>
-            </div>
-        </div>
+
         <card class="mt-3" >
+            <div class="flex justify-between">
+                <div class="relative z-50 w-full max-w-xs mt-2 ml-2">
+                    <div class="relative">
+                        <div class="relative h-9 flex-no-shrink mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" aria-labelledby="search" role="presentation" class="fill-current absolute search-icon-center ml-3 text-80"><path fill-rule="nonzero" d="M14.32 12.906l5.387 5.387a1 1 0 0 1-1.414 1.414l-5.387-5.387a8 8 0 1 1 1.414-1.414zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path></svg>
+                            <input type="search" v-model="search" placeholder="Нажмите / для поиска" class="appearance-none form-search w-search pl-search shadow mail-search">
+                        </div>
+                    </div>
+                </div>
+                <TableFilter class="mr-2"></TableFilter>
+            </div>
             <table class="table w-full">
                 <thead>
                     <tr>
@@ -82,12 +86,14 @@
     import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
     import am4themes_animated from "@amcharts/amcharts4/themes/animated";
     import Preloader from "../templates/Preloader";
+    import TableFilter from "../templates/TableFilter";
 
     am4core.useTheme(am4themes_animated);
 
     export default {
         components: {
-            Preloader
+            TableFilter,
+            Preloader,
         },
         data(){
             return {
