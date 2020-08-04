@@ -2,31 +2,44 @@
     <div>
         <heading class="mb-6">{{__('Handle Mail')}}</heading>
         <div class="flex">
-            <card class="w-1/3 flex flex-col items-center justify-center m-2" style="min-height: 100px">
+            <card class="w-1/4 flex flex-col items-center justify-center m-2" style="min-height: 100px">
                 <p>{{__('New today')}}</p>
                 <p>{{ getTodayMails }}</p>
             </card>
-            <card class="w-1/3 flex flex-col items-center justify-center m-2" style="min-height: 100px">
+            <card class="w-1/4 flex flex-col items-center justify-center m-2" style="min-height: 100px">
                 <p>{{__('Per month')}}</p>
                 <p>{{ getMailForMonth }}</p>
             </card>
-            <card class="w-1/3 flex flex-col items-center justify-center m-2" v-if="failedMails === 0" style="min-height: 100px">
+            <card class="w-1/4 flex flex-col items-center justify-center m-2" v-if="failedMails === 0" style="min-height: 100px">
                 <h4>{{__('Failed')}}</h4>
                 <p>{{ failedMails }}</p>
             </card>
-            <router-link :to="{name: 'handle-mail-failed'}" class="w-1/3 card flex flex-col items-center justify-center m-2  failed-card link" v-if="failedMails > 0" style="min-height: 100px">
+            <router-link :to="{name: 'handle-mail-failed'}" class="w-1/4 card flex flex-col items-center justify-center m-2  failed-card link" v-if="failedMails > 0" style="min-height: 100px">
                     <h4>{{__('Failed')}}</h4>
                     <p>{{ failedMails }}</p>
             </router-link>
+            <router-link :to="{name: 'handle-mail-metrika-index'}" class="w-1/4 card flex flex-col items-center justify-center m-2 card-link link" v-if="failedMails > 0" style="min-height: 100px">
+                <h4>{{__('Location')}}</h4>
+                <p><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path class="heroicon-ui" d="M5.64 16.36a9 9 0 1 1 12.72 0l-5.65 5.66a1 1 0 0 1-1.42 0l-5.65-5.66zm11.31-1.41a7 7 0 1 0-9.9 0L12 19.9l4.95-4.95zM12 14a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>
+                </p>
+            </router-link>
         </div>
         <card class="flex flex-col m-2">
-            <ve-line :data="chartData" :colors="colors"></ve-line>
+<!--            <ve-line :data="chartData" :colors="colors"></ve-line>-->
+            <div class="hello" ref="chartdiv">
+            </div>
         </card>
         <div class="flex mb-6 mt-4">
             <heading class="">{{__('Mails')}}</heading>
-            <button @click="deleteOption" :class="['btn btn-default mr-2', isDelete? 'btn-danger' : 'btn-teal']" style="margin-left: auto">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="fill-current mt-1"><path d="M8 6V4c0-1.1.9-2 2-2h4a2 2 0 0 1 2 2v2h5a1 1 0 0 1 0 2h-1v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8H3a1 1 0 1 1 0-2h5zM6 8v12h12V8H6zm8-2V4h-4v2h4zm-4 4a1 1 0 0 1 1 1v6a1 1 0 0 1-2 0v-6a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v6a1 1 0 0 1-2 0v-6a1 1 0 0 1 1-1z"/></svg>
-            </button>
+
+            <div class="flex justify-center align-center" style="margin-left: auto">
+                <button class="btn btn-default btn-teal mr-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="fill-current mt-2"><path fill-rule="nonzero" d="M.293 5.707A1 1 0 0 1 0 4.999V1A1 1 0 0 1 1 0h18a1 1 0 0 1 1 1v4a1 1 0 0 1-.293.707L13 12.413v2.585a1 1 0 0 1-.293.708l-4 4c-.63.629-1.707.183-1.707-.708v-6.585L.293 5.707zM2 2v2.585l6.707 6.707a1 1 0 0 1 .293.707v4.585l2-2V12a1 1 0 0 1 .293-.707L18 4.585V2H2z"></path></svg>
+                </button>
+                <button @click="deleteOption" :class="['btn btn-default mr-2', isDelete? 'btn-danger' : 'btn-teal']" >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="fill-current mt-1"><path d="M8 6V4c0-1.1.9-2 2-2h4a2 2 0 0 1 2 2v2h5a1 1 0 0 1 0 2h-1v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8H3a1 1 0 1 1 0-2h5zM6 8v12h12V8H6zm8-2V4h-4v2h4zm-4 4a1 1 0 0 1 1 1v6a1 1 0 0 1-2 0v-6a1 1 0 0 1 1-1zm4 0a1 1 0 0 1 1 1v6a1 1 0 0 1-2 0v-6a1 1 0 0 1 1-1z"/></svg>
+                </button>
+            </div>
         </div>
         <div class="chat-card-block m-2">
 <!--            <div class="relative z-50 w-full max-w-xs mb-4">-->
@@ -45,7 +58,6 @@
             </card>
             <div v-if="!loading">
                 <card class="w-full" v-if="mails.length > 0">
-
                     <table class="table w-full">
                         <thead>
                         <tr>
@@ -110,6 +122,11 @@
 <script>
 import VeLine from 'v-charts/lib/line.common'
 import Preloader from './templates/Preloader'
+import * as am4core from "@amcharts/amcharts4/core";
+import * as am4charts from "@amcharts/amcharts4/charts";
+import am4themes_animated from "@amcharts/amcharts4/themes/animated";
+
+am4core.useTheme(am4themes_animated);
 
 export default {
     components: {
@@ -119,13 +136,9 @@ export default {
     data() {
         return {
             test: [],
-            chartData: {
-                columns: ['date', 'mails', 'failed'],
-                rows: [
-                ]
-            },
             colors: ['#1be9bf', '#c23531'],
             failedMails: 0,
+            chartMails: [],
             mails: [],
             pagination: {},
             modalOpen: false,
@@ -135,7 +148,8 @@ export default {
     },
     mounted() {
         axios.get('/nova-vendor/handle-mail/chart').then((response)=>{
-            this.chartData.rows = response.data;
+            this.chartMails = response.data;
+            this.initChart(this.chartMails);
         });
         axios.get('/nova-vendor/handle-mail/failed_count').then((response) => {
             this.failedMails = response.data;
@@ -196,16 +210,58 @@ export default {
                 this.loading = false;
             });
         },
+        initChart(data){
+            let chart = am4core.create(this.$refs.chartdiv, am4charts.XYChart);
+            chart.paddingRight = 20;
+            data = data.map((e) => {
+                 e.date  = new Date(e.date);
+                return e;
+            });
+            chart.data = data;
+
+            let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+            dateAxis.baseInterval = {
+                "timeUnit": "minute",
+                "count": 1
+            };
+            dateAxis.tooltipDateFormat = "d MMMM";
+
+            let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            valueAxis.tooltip.disabled = true;
+            valueAxis.title.text = "Mails";
+
+            let series = chart.series.push(new am4charts.LineSeries());
+            series.dataFields.dateX = "date";
+            series.dataFields.valueY = "value";
+            series.tooltipText = "Mails: [bold]{valueY}[/]";
+            series.fillOpacity = 0.3;
+
+
+            chart.cursor = new am4charts.XYCursor();
+            chart.cursor.lineY.opacity = 0;
+            chart.scrollbarX = new am4charts.XYChartScrollbar();
+            chart.scrollbarX.series.push(series);
+
+
+            dateAxis.start = 0.8;
+            dateAxis.keepSelection = true;
+        }
     },
     computed: {
         getMailForMonth(){
-            // let data = this.mails.filter(function(item){
-            //     let date = moment(item.created_at).format('ll');
-            //     return moment(date).isSameOrAfter(moment().subtract(30, 'days').format('D MMMM'));
-            // });
+            let data = this.chartMails.filter(function(item){
+                if(item.value !== 0){
+                    let date = moment(item.date).format('ll');
+                    return moment(date).isSameOrAfter(moment().subtract(30, 'days').format('ll'));
+                }
+                else{
+                    return false;
+                }
+            });
+
             let count = 0;
-            for(var item in this.chartData.rows){
-                count += this.chartData.rows[item].mails;
+            for(let item in data){
+                count += data[item].value;
             }
 
             return count;
@@ -227,4 +283,8 @@ export default {
 
 <style>
 /* Scoped Styles */
+.hello {
+    width: 100%;
+    height: 500px;
+}
 </style>

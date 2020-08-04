@@ -1,8 +1,9 @@
+$main: #38b2ac;
 .teal{
-    color: #38b2ac;
+    color: $main;
 }
 .teal-hover:hover{
-    color: #38b2ac;
+    color: $main;
 }
 canvas{
     max-width: 1550px;
@@ -16,6 +17,11 @@ canvas{
 .failed-card:hover{
     background-color: #FC8181;
 }
+
+.card-link:hover{
+    background-color: $main;
+}
+
 .link{
     position: relative;
     cursor: pointer;
@@ -34,17 +40,17 @@ canvas{
     /*border: 1px solid var(--80);*/
 }
 .mail-search:focus{
-    border: 2px solid #38b2ac;
+    border: 2px solid $main;
 }
 .btn-teal{
-    background-color: #38b2ac;
+    background-color: $main;
     color: #ffffff;
 }
 .breadcrumb{
     text-decoration: none;
 }
 .breadcrumb:hover{
-    color: #38b2ac;
+    color: $main;
 }
 .preloader_main{
     position: absolute;

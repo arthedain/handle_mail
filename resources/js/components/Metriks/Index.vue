@@ -33,9 +33,13 @@
                         </div>
                     </div>
                 </div>
-                <TableFilter class="mr-2"></TableFilter>
+                <TableFilter
+                    class="mr-2"
+                    :method="filterData"
+                />
             </div>
-            <table class="table w-full">
+            <preloader v-if="loading" class="map"></preloader>
+            <table class="table w-full" v-if="!loading">
                 <thead>
                     <tr>
                         <th class="w-8">&nbsp;</th>
@@ -69,6 +73,7 @@
                         {{__('Previous')}}
                     </button>
                     <span class="text-sm text-80 px-4">
+                            {{ __('total') }} {{ data.length }}
 <!--                        {{ pageNumber === 0 ? 1 : paginationFrom() }} - {{ paginationTo() <= paginatedData.length ? paginationTo() : data.length }} {{ __('of') }} {{ data.length }}-->
                     </span>
                     <button rel="next" dusk="next" @click="nextPage" :disabled="pageNumber >= pageCount() -1" class="btn btn-link py-3 px-4 teal dim">
@@ -102,13 +107,13 @@
                 pageNumber: 0,
                 size: 20,
                 search: '',
+                chart: null,
             }
         },
         mounted() {
             axios.get('/nova-vendor/handle-mail/get_map_data').then((response) => {
                 this.loading = false;
                 this.data = response.data;
-
                 this.initMap();
             });
 
@@ -168,7 +173,7 @@
                     array.push(dot);
                 });
                 imageSeries.data = array;
-
+                this.chart = chart;
             },
             nextPage(){
                 this.pageNumber++;
@@ -187,7 +192,16 @@
             },
             paginationTo(){
                 return (this.pageNumber * this.size) + this.size;
-            }
+            },
+            filterData(data){
+                this.chart.dispose();
+                this.loading = true;
+                axios.get('/nova-vendor/handle-mail/get_map_data', {params: data}).then((response) => {
+                    this.loading = false;
+                    this.data = response.data;
+                    this.initMap();
+                });
+            },
         },
 
         computed: {

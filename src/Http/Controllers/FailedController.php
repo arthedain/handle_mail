@@ -16,7 +16,7 @@ class FailedController
     public function single(Request $request){
         $mail = app('FailedJobsModel')->where('id', $request->id)->firstOrFail();
         $content = unserialize(json_decode($mail->payload)->data->command);
-
+        dd($content);
         $view = view('vendor.handle-mail.mail', ['subject' => $content->subject, 'content' => $content->content])->render();
 
         return response()->json(['mail' => $mail, 'content' => $content, 'view' => $view]);

@@ -30,6 +30,7 @@ Route::post('/delete/{id}', 'Arthedain\HandleMail\Http\Controllers\ToolControlle
  * Single mail
  */
 Route::get('/single/{id}', 'Arthedain\HandleMail\Http\Controllers\SingleController@single');
+Route::get('/resend/{id}', 'Arthedain\HandleMail\Http\Controllers\SingleController@resend');
 
 /*
  * Failed

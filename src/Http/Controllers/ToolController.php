@@ -9,25 +9,13 @@ use Illuminate\Http\Request;
 class ToolController
 {
     public function getChartData(Request $request){
-        $data = app('HandleMailModel')->where('created_at', '>=', Carbon::today()->subDays(30))->orderBy('created_at')->get();
-        $data_failed = app('FailedJobsModel')->where('failed_at', '>=', Carbon::today()->subDays(30))->where('queue', 'handle-mail')->orderBy('failed_at')->get();
+        $data = app('HandleMailModel')->orderBy('created_at')->get();
 
-        $period = CarbonPeriod::create(Carbon::now()->subDays(30), Carbon::now());
+        $period = CarbonPeriod::create($data->first()->created_at, Carbon::now());
 
         $collection = $this->sortData($data, $period, 'mails');
-        $collection_failed = $this->sortData($data_failed, $period, 'failed', 'failed_at');
 
-        $final_collection = collect();
-        foreach ($collection as $item){
-            foreach ($collection_failed as $failed){
-                if($item['date'] == $failed['date']){
-                    $item['failed'] = $failed['failed'];
-                }
-            }
-            $final_collection->push($item);
-        }
-
-        return response()->json($final_collection->toArray());
+        return response()->json($collection->toArray());
     }
 
     public function sortData($data, $period, $name, $field = 'created_at'){
@@ -38,8 +26,8 @@ class ToolController
             });
 
             $collection->push([
-                'date' => Carbon::parse($date)->format('d F'),
-                $name => $items->count(),
+                'date' => Carbon::parse($date),
+                'value' => $items->count(),
             ]);
         }
         return $collection;

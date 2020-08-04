@@ -5,9 +5,12 @@ namespace Arthedain\HandleMail\Http\Controllers\User;
 use Arthedain\HandleMail\Jobs\HandleMailJob;
 use Illuminate\Http\Request;
 use Stevebauman\Location\Location;
+use Arthedain\HandleMail\Traits\HandleJob;
 
 class HandleMailController
 {
+    use HandleJob;
+
     /**
      * @param Request $request
      * @param string $subject
@@ -19,13 +22,7 @@ class HandleMailController
 
         $model = $this->saveToDB($request);
 
-        $job = config('handle-mail.job', HandleMailJob::class);
-
-        $emails = config('handle-mail.email', ['admin@mail.com']);
-
-        foreach($emails as $email) {
-            (new $job($subject, $content, $email, $model->id))->dispatch($subject, $content, $email, $model->id)->onQueue('handle-mail');
-        }
+        $this->createJob($subject, $content, $model->id);
 
         if($callback){
             $callback();
