@@ -2,16 +2,15 @@
 
 namespace Arthedain\HandleMail;
 
-use Arthedain\HandleMail\Models\FailedJobs;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\ServiceProvider;
-use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Nova;
-use Arthedain\HandleMail\Http\Middleware\Authorize;
+use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\Facades\Queue;
-use Illuminate\Queue\Events\JobProcessed;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Queue\Events\JobFailed;
-use Arthedain\HandleMail\Models\HandleMail;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Queue\Events\JobProcessed;
+use Arthedain\HandleMail\Services\MailService;
+use Arthedain\HandleMail\Http\Middleware\Authorize;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -22,41 +21,13 @@ class ToolServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([
-            __DIR__.'/Jobs/HandleMailJob.php' => app_path('/Jobs/HandleMailJob.php'),
-        ], 'job');
-        $this->publishes([
-            __DIR__.'/Mail/HandleMail.php' => app_path('/Mail/HandleMail.php'),
-        ], 'mail');
-        $this->publishes([
-            __DIR__.'/public/view/mail.blade.php' => resource_path('/views/vendor/handle-mail/mail.blade.php')
-        ], 'view');
-        $this->publishes([
-            __DIR__.'/public/assets/handle-mail.js' => public_path('/assets/handle-mail.js')
-        ], 'script');
-        $this->publishes([
-            __DIR__.'/../config/handle-mail.php' => config_path('handle-mail.php')
-        ], 'config');
-        $this->publishes([
-            __DIR__.'/public/migrations/2020_06_30_080754_create_handle_mails_table.php' => database_path('/migrations/2020_06_30_080754_create_handle_mails_table.php')
-        ], 'migration');
-
-        $this->publishes([
-            __DIR__.'/public/view/mail.blade.php' => resource_path('/views/vendor/handle-mail/mail.blade.php'),
-            __DIR__.'/public/assets/handle-mail.js' => public_path('/assets/handle-mail.js'),
-            __DIR__.'/../config/handle-mail.php' => config_path('handle-mail.php'),
-            __DIR__.'/public/migrations/2020_06_30_080754_create_handle_mails_table.php' => database_path('/migrations/2020_06_30_080754_create_handle_mails_table.php'),
-        ], 'default');
+        $this->registerPublishes();
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'handle-mail');
 
         $this->app->booted(function () {
             $this->routes();
         });
-
-        $this->app->singleton('HandleMailModel', config('handle-mail.models.handle_mail', HandleMail::class));
-        $this->app->singleton('FailedJobsModel', config('handle-mail.models.failed_jobs', FailedJobs::class));
-
 
         Nova::serving(function (ServingNova $event) {
             //
@@ -65,13 +36,12 @@ class ToolServiceProvider extends ServiceProvider
 //        php artisan queue:work --stop-when-empty --queue=handle-mail
 
         Queue::after(function (JobProcessed $event) {
-            $this->updateMailStatus($event, 'success');
+            MailService::updateMailStatus($event, 'success');
         });
 
         Queue::failing(function (JobFailed $event) {
-            $this->updateMailStatus($event, 'error');
+            MailService::updateMailStatus($event, 'error');
         });
-
     }
 
     /**
@@ -88,7 +58,8 @@ class ToolServiceProvider extends ServiceProvider
         Route::middleware(['nova', Authorize::class])
                 ->prefix('nova-vendor/handle-mail')
                 ->group(__DIR__.'/../routes/api.php');
-        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
     }
 
     /**
@@ -98,15 +69,34 @@ class ToolServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
     }
 
-    public function updateMailStatus($event, $status){
-        if($event->job->getQueue()){
-            $mail_id = unserialize($event->job->payload()['data']['command'])->id;
-            \DB::table('handle_mails')->where('id', $mail_id)->update([
-                'status' => $status
-            ]);
-        }
+    public function registerPublishes()
+    {
+        $this->publishes([
+            __DIR__.'/Jobs/HandleMailJob.php' => app_path('/Jobs/HandleMailJob.php'),
+        ], 'job');
+        $this->publishes([
+            __DIR__.'/Mail/HandleMail.php' => app_path('/Mail/HandleMail.php'),
+        ], 'mail');
+        $this->publishes([
+            __DIR__.'/public/view/' => resource_path('/views/vendor/handle-mail/'),
+        ], 'view');
+        $this->publishes([
+            __DIR__.'/public/assets/handle-mail.js' => public_path('/assets/handle-mail.js'),
+        ], 'script');
+        $this->publishes([
+            __DIR__.'/../config/handle-mail.php' => config_path('handle-mail.php'),
+        ], 'config');
+        $this->publishes([
+            __DIR__.'/public/migrations/2020_06_30_080754_create_handle_mails_table.php' => database_path('/migrations/2020_06_30_080754_create_handle_mails_table.php'),
+        ], 'migration');
+
+        $this->publishes([
+            __DIR__.'/public/view/mail.blade.php' => resource_path('/views/vendor/handle-mail/mail.blade.php'),
+            __DIR__.'/public/assets/handle-mail.js' => public_path('/assets/handle-mail.js'),
+            __DIR__.'/../config/handle-mail.php' => config_path('handle-mail.php'),
+            __DIR__.'/public/migrations/2020_06_30_080754_create_handle_mails_table.php' => database_path('/migrations/2020_06_30_080754_create_handle_mails_table.php'),
+        ], 'default');
     }
 }

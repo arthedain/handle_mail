@@ -10,8 +10,9 @@ class Authorize
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return \Illuminate\Http\Response
      */
     public function handle($request, $next)
@@ -24,7 +25,8 @@ class Authorize
     /**
      * Determine whether this tool belongs to the package.
      *
-     * @param  \Laravel\Nova\Tool  $tool
+     * @param \Laravel\Nova\Tool $tool
+     *
      * @return bool
      */
     public function matchesTool($tool)

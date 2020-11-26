@@ -1,45 +1,29 @@
 <?php
 
-
 namespace Arthedain\HandleMail\Http\Controllers;
 
-
+use Arthedain\HandleMail\Models\HandleMail;
+use Arthedain\HandleMail\Services\ChartService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Stevebauman\Location\Location;
 
 class MetrikaController
 {
-    public function getMapData(Request $request){
+    public function getMapData(Request $request, ChartService $chartService)
+    {
+        $mails = HandleMail::orderBy('id', 'desc');
 
-        $mails = app('HandleMailModel')->orderBy('id', 'desc');
-
-        if($request->from){
-            $mails = $mails->where('created_at', ">=", $request->from);
+        if ($request->from) {
+            $mails = $mails->from(Carbon::parse($request->from));
         }
 
-        if($request->to){
-            $mails = $mails->where('created_at', "<=", $request->to);
+        if ($request->to) {
+            $mails = $mails->to(Carbon::parse($request->to));
         }
 
         $mails = $mails->get(['id', 'data', 'ip', 'created_at']);
-        $location = new Location();
-        $data = collect();
 
-        foreach ($mails as $item){
-            if(isset($item->data['ip_info']) && $item->data['ip_info']){
-                $element = collect($item->data['ip_info']);
-            }else{
-                $element = $location->get($item->ip);
-            }
-
-            if ($element){
-                $element = $element->toArray();
-                $element['id'] = $item->id;
-                $element['created_at'] = Carbon::parse($item->created_at)->toDateTimeString();
-                $data->push($element);
-            }
-        }
+        $data = $chartService->mapData($mails);
 
         return response()->json($data->toArray());
     }

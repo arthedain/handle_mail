@@ -1,9 +1,12 @@
 <template>
     <div>
+<!--        <pre>{{ loadingState }}</pre>-->
+<!--        <pre>{{ mails }}</pre>-->
         <div class="flex mb-6">
             <router-link :to="{name: 'handle-mail'}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                    <path fill="#38b2ac" class="heroicon-ui" d="M5.41 11H21a1 1 0 0 1 0 2H5.41l5.3 5.3a1 1 0 0 1-1.42 1.4l-7-7a1 1 0 0 1 0-1.4l7-7a1 1 0 0 1 1.42 1.4L5.4 11z"/>
+                    <path fill="#38b2ac" class="heroicon-ui"
+                          d="M5.41 11H21a1 1 0 0 1 0 2H5.41l5.3 5.3a1 1 0 0 1-1.42 1.4l-7-7a1 1 0 0 1 0-1.4l7-7a1 1 0 0 1 1.42 1.4L5.4 11z"/>
                 </svg>
             </router-link>
             <p class="text-2xl ml-2 mr-2">/</p>
@@ -18,65 +21,79 @@
             </heading>
         </div>
         <card class="w-full map">
-            <preloader v-if="loading" class="map"></preloader>
-            <div id="chartdiv" class="map">
+            <preloader v-show="loading" class="map"></preloader>
+            <div id="chartdiv" v-show="!loading" class="map">
             </div>
         </card>
 
-        <card class="mt-3" >
+        <card class="mt-3">
             <div class="flex justify-between">
                 <div class="relative z-50 w-full max-w-xs mt-2 ml-2">
                     <div class="relative">
                         <div class="relative h-9 flex-no-shrink mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" aria-labelledby="search" role="presentation" class="fill-current absolute search-icon-center ml-3 text-80"><path fill-rule="nonzero" d="M14.32 12.906l5.387 5.387a1 1 0 0 1-1.414 1.414l-5.387-5.387a8 8 0 1 1 1.414-1.414zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path></svg>
-                            <input type="search" v-model="search" placeholder="Нажмите / для поиска" class="appearance-none form-search w-search pl-search shadow mail-search">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                                 aria-labelledby="search" role="presentation"
+                                 class="fill-current absolute search-icon-center ml-3 text-80">
+                                <path fill-rule="nonzero"
+                                      d="M14.32 12.906l5.387 5.387a1 1 0 0 1-1.414 1.414l-5.387-5.387a8 8 0 1 1 1.414-1.414zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
+                            </svg>
+                            <input type="search" v-model="search" placeholder="Нажмите / для поиска"
+                                   class="appearance-none form-search w-search pl-search shadow mail-search">
                         </div>
                     </div>
                 </div>
-                <TableFilter
+                <table-filter
                     class="mr-2"
-                    :method="filterData"
+                    @change="fetchData"
                 />
             </div>
             <preloader v-if="loading" class="map"></preloader>
             <table class="table w-full" v-if="!loading">
                 <thead>
-                    <tr>
-                        <th class="w-8">&nbsp;</th>
-                        <th class="text-left px-4 py-2">IP</th>
-                        <th class="text-left px-4 py-2">Country</th>
-                        <th class="text-left px-4 py-2">Region</th>
-                        <th class="text-left px-4 py-2">City</th>
-                        <th class="text-left px-4 py-2">created_at</th>
-                        <th></th>
-                    </tr>
+                <tr>
+                    <th class="w-8">&nbsp;</th>
+                    <th class="text-left px-4 py-2">IP</th>
+                    <th class="text-left px-4 py-2">Country</th>
+                    <th class="text-left px-4 py-2">Region</th>
+                    <th class="text-left px-4 py-2">City</th>
+                    <th class="text-left px-4 py-2">created_at</th>
+                    <th></th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in paginatedData">
-                        <td></td>
-                        <td class="px-4 py-2">{{ item.ip }}</td>
-                        <td class="px-4 py-2">{{ item.countryName }}</td>
-                        <td class="px-4 py-2">{{ item.regionName }}</td>
-                        <td class="px-4 py-2">{{ item.cityName }}</td>
-                        <td class="px-4 py-2">{{ item.created_at }}</td>
-                        <td class="td-fit text-right pr-6 align-middle">
-                            <router-link :to="{name: 'handle-mail-single', params: {id:item.id}}" class="cursor-pointer text-70 teal-hover mr-3 inline-flex items-center has-tooltip">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" class="fill-current"><path d="M17.56 17.66a8 8 0 0 1-11.32 0L1.3 12.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95zm-9.9-1.42a6 6 0 0 0 8.48 0L20.38 12l-4.24-4.24a6 6 0 0 0-8.48 0L3.4 12l4.25 4.24zM11.9 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>
-                            </router-link>
-                        </td>
-                    </tr>
+                <tr v-for="item in paginatedData">
+                    <td></td>
+                    <td class="px-4 py-2">{{ item.ip }}</td>
+                    <td class="px-4 py-2">{{ __(item.countryName) }}</td>
+                    <td class="px-4 py-2">{{ __(item.regionName) }}</td>
+                    <td class="px-4 py-2">{{ __(item.cityName) }}</td>
+                    <td class="px-4 py-2">{{ __(item.created_at) }}</td>
+                    <td class="td-fit text-right pr-6 align-middle">
+                        <router-link :to="{name: 'handle-mail-single', params: {id:item.id}}"
+                                     class="cursor-pointer text-70 teal-hover mr-3 inline-flex items-center has-tooltip">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+                                 class="fill-current">
+                                <path
+                                    d="M17.56 17.66a8 8 0 0 1-11.32 0L1.3 12.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95zm-9.9-1.42a6 6 0 0 0 8.48 0L20.38 12l-4.24-4.24a6 6 0 0 0-8.48 0L3.4 12l4.25 4.24zM11.9 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                            </svg>
+                        </router-link>
+                    </td>
+                </tr>
                 </tbody>
             </table>
-            <div class="bg-20 rounded-b" per-page="25" resource-count-label="1-25 из 59" current-resource-count="25" all-matching-resource-count="59">
+            <div class="bg-20 rounded-b" per-page="25" resource-count-label="1-25 из 59" current-resource-count="25"
+                 all-matching-resource-count="59">
                 <nav class="flex justify-between items-center">
-                    <button :disabled="pageNumber==0" @click="previousPage" rel="prev" dusk="previous" class="btn btn-link py-3 px-4 teal dim">
+                    <button :disabled="pageNumber==0" @click="previousPage" rel="prev" dusk="previous"
+                            class="btn btn-link py-3 px-4 teal dim">
                         {{__('Previous')}}
                     </button>
                     <span class="text-sm text-80 px-4">
                             {{ __('total') }} {{ data.length }}
-<!--                        {{ pageNumber === 0 ? 1 : paginationFrom() }} - {{ paginationTo() <= paginatedData.length ? paginationTo() : data.length }} {{ __('of') }} {{ data.length }}-->
+                        <!--                        {{ pageNumber === 0 ? 1 : paginationFrom() }} - {{ paginationTo() <= paginatedData.length ? paginationTo() : data.length }} {{ __('of') }} {{ data.length }}-->
                     </span>
-                    <button rel="next" dusk="next" @click="nextPage" :disabled="pageNumber >= pageCount() -1" class="btn btn-link py-3 px-4 teal dim">
+                    <button rel="next" dusk="next" @click="nextPage" :disabled="pageNumber >= pageCount() -1"
+                            class="btn btn-link py-3 px-4 teal dim">
                         {{__('Next')}}
                     </button>
                 </nav>
@@ -88,7 +105,7 @@
 <script>
     import * as am4core from "@amcharts/amcharts4/core";
     import * as am4maps from "@amcharts/amcharts4/maps";
-    import am4geodata_worldLow from "@amcharts/amcharts4-geodata/worldLow";
+    import am4geodata_worldHigh from "@amcharts/amcharts4-geodata/worldHigh";
     import am4themes_animated from "@amcharts/amcharts4/themes/animated";
     import Preloader from "../templates/Preloader";
     import TableFilter from "../templates/TableFilter";
@@ -100,31 +117,73 @@
             TableFilter,
             Preloader,
         },
-        data(){
+        data() {
             return {
-                data: [],
-                loading: true,
+                // data: [],
+                // loading: true,
                 pageNumber: 0,
                 size: 20,
                 search: '',
                 chart: null,
             }
         },
-        mounted() {
-            axios.get('/nova-vendor/handle-mail/get_map_data').then((response) => {
-                this.loading = false;
-                this.data = response.data;
-                this.initMap();
-            });
-
+        async mounted() {
+            // axios.get('/nova-vendor/handle-mail/get_map_data').then((response) => {
+            //     this.loading = false;
+            //     this.data = response.data;
+            //     this.initMap();
+            // });
+            await this.fetchData();
+            // this.initMap();
         },
 
         methods: {
-            initMap(){
+            fetchData(data = '') {
+                this.$store.dispatch('fetchMetrikaMails', data);
+            },
+            nextPage() {
+                this.pageNumber++;
+            },
+            previousPage() {
+                this.pageNumber--;
+            },
+            pageCount() {
+                let l = this.data.length,
+                    s = this.size;
+
+                return Math.ceil(l / s);
+            },
+            paginationFrom() {
+                return this.pageNumber * this.size;
+            },
+            paginationTo() {
+                return (this.pageNumber * this.size) + this.size;
+            }
+        },
+
+        computed: {
+            data() {
+                return this.$store.getters.getMetrikaMails;
+            },
+            loading(){
+                return this.$store.getters.loading;
+            },
+            paginatedData() {
+                const start = this.pageNumber * this.size,
+                    end = start + this.size;
+                return this.data.filter(item => {
+                    return item.cityName.toLowerCase().includes(this.search.toLowerCase())
+                        || item.countryName.toLowerCase().includes(this.search.toLowerCase());
+                }).slice(start, end);
+            },
+
+        },
+        watch: {
+            data() {
                 let chart = am4core.create("chartdiv", am4maps.MapChart);
 
                 // Set map definition
-                chart.geodata = am4geodata_worldLow;
+                chart.geodata = am4geodata_worldHigh;
 
                 // Set projection
                 chart.projection = new am4maps.projections.Miller();
@@ -157,14 +216,14 @@
 
 
                 let circle2 = imageSeries.mapImages.template.createChild(am4core.Circle);
-                circle2.radius = 2.5;
+                circle2.radius = .1;
                 circle2.propertyFields.fill = "color";
 
                 let colorSet = new am4core.ColorSet();
 
                 let array = [];
 
-                this.data.map((e)=>{
+                this.data.map((e) => {
                     let dot = {};
                     dot.title = e.cityName;
                     dot.latitude = parseFloat(e.latitude);
@@ -174,46 +233,7 @@
                 });
                 imageSeries.data = array;
                 this.chart = chart;
-            },
-            nextPage(){
-                this.pageNumber++;
-            },
-            previousPage(){
-                this.pageNumber--;
-            },
-            pageCount(){
-                let l = this.data.length,
-                    s = this.size;
-
-                return Math.ceil(l/s);
-            },
-            paginationFrom(){
-                return this.pageNumber * this.size;
-            },
-            paginationTo(){
-                return (this.pageNumber * this.size) + this.size;
-            },
-            filterData(data){
-                this.chart.dispose();
-                this.loading = true;
-                axios.get('/nova-vendor/handle-mail/get_map_data', {params: data}).then((response) => {
-                    this.loading = false;
-                    this.data = response.data;
-                    this.initMap();
-                });
-            },
-        },
-
-        computed: {
-            paginatedData(){
-                const start = this.pageNumber * this.size,
-                    end = start + this.size;
-                return this.data.filter(item => {
-                    return item.cityName.toLowerCase().includes(this.search.toLowerCase())
-                        || item.countryName.toLowerCase().includes(this.search.toLowerCase());
-                }).slice(start, end);
             }
-
         },
 
         beforeDestroy() {

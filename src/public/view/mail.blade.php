@@ -6,7 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title data-form="subject">{{ __($subject)}}</title>
-
+    <style>
+        html *
+        {
+            font-family: Arial !important;
+        }
+    </style>
 </head>
 
 <body class="email-template" bgcolor="#e4e7e9"

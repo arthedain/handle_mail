@@ -9,22 +9,9 @@ return [
         //
     ],
 
-    /*
-     * Models path
-     */
-    'models' => [
-        'handle_mail' => Arthedain\HandleMail\Models\HandleMail::class,
-        'failed_jobs' => Arthedain\HandleMail\Models\FailedJobs::class,
-    ],
+    'view' => 'vendor.handle-mail.mail',
 
-    /*
-     * Mail path
-     */
-    'mail' => Arthedain\HandleMail\Mail\HandleMail::class,
+    'telegram' => false,
 
-    /*
-     * Mail job path
-     */
-    'job' => Arthedain\HandleMail\Jobs\HandleMailJob::class,
-
+    'geo_in_email' => false,
 ];

@@ -19,6 +19,10 @@
                     {{ __('Are you sure you want to run this action?') }}
                 </p>
             </div>
+            <div class="m-3">
+                <p class="text-80 m-2">Email</p>
+                <input type="text" v-model="email" class="w-full form-control form-input form-input-bordered mb-4" placeholder="Email">
+            </div>
 
             <div class="bg-30 px-6 py-3 flex">
                 <div class="flex items-center ml-auto">

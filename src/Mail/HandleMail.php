@@ -3,7 +3,6 @@
 namespace Arthedain\HandleMail\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
@@ -12,6 +11,7 @@ class HandleMail extends Mailable
     use Queueable, SerializesModels;
 
     public $subject;
+
     public $content;
 
     /**
@@ -32,6 +32,8 @@ class HandleMail extends Mailable
      */
     public function build()
     {
-        return $this->view('vendor.handle-mail.mail', ['subject' => $this->subject, 'content' => $this->content]);
+        $view = config('handle-mail.view', 'vendor.handle-mail.mail');
+
+        return $this->view($view, ['subject' => $this->subject, 'content' => $this->content]);
     }
 }

@@ -2,34 +2,43 @@
 
 namespace Arthedain\HandleMail\Jobs;
 
-use Arthedain\HandleMail\Mail\HandleMail;
+use Mail;
 use Illuminate\Bus\Queueable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Arthedain\HandleMail\Mail\HandleMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Mail;
 
 class HandleMailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $subject = '';
-    public $content = '';
-    public $id;
-    public $email;
+    public string $subject = '';
+
+    public array $content = [];
+
+    public string $id;
+
+    public string $email;
+
+    public string $view;
 
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param string $subject
+     * @param array  $content
+     * @param string $email
+     * @param string $id
      */
-    public function __construct($subject, $content, $email, $id = 0)
+    public function __construct(string $subject, array $content, string $email, string $id = '0')
     {
         $this->subject = $subject;
         $this->content = $content;
         $this->id = $id;
         $this->email = $email;
+        $this->view = $view = config('handle-mail.view', 'vendor.handle-mail.mail');
     }
 
     /**
@@ -39,9 +48,6 @@ class HandleMailJob implements ShouldQueue
      */
     public function handle()
     {
-        $mail = config('handle-mail.mail', HandleMail::class);
-
-
-        Mail::to($this->email)->send(new $mail($this->subject, $this->content));
+        Mail::to($this->email)->send(new HandleMail($this->subject, $this->content));
     }
 }

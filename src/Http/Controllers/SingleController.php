@@ -1,31 +1,34 @@
 <?php
 
-
 namespace Arthedain\HandleMail\Http\Controllers;
 
-use Arthedain\HandleMail\Jobs\HandleMailJob;
-use Arthedain\HandleMail\Traits\HandleJob;
-use Carbon\Carbon;
+use Arthedain\HandleMail\Models\HandleMail;
+use Arthedain\HandleMail\Services\MailService;
 use Illuminate\Http\Request;
 
 class SingleController
 {
-    use HandleJob;
+    protected MailService $mailService;
 
-    public function single(Request $request)
+    public function __construct(MailService $mailService)
     {
-        $mail = app('HandleMailModel')->where('id', $request->id)->firstOrFail();
-
-        $data = collect($mail->toArray())->except(['updated_at']);
-
-        $data['created_at'] = Carbon::parse($mail->created_at)->toDateTimeString();
-
-        return response()->json($data->toArray());
+        $this->mailService = $mailService;
     }
 
-    public function resend(Request $request){
-        $mail = app('HandleMailModel')->where('id', $request->id)->firstOrFail();
+    public function single(string $id)
+    {
+        $mail = HandleMail::where('id', $id)->firstOrFail();
 
+        $data = $this->mailService->prepareMail($mail);
+
+        return response()->json($data);
+    }
+
+    public function resend(Request $request, string $id)
+    {
+        dd($request->all());
+        $mail = HandleMail::where('id', $id)->firstOrFail();
+        dd($mail);
         $content = collect($mail)->except(['id', 'created_at', 'updated_at', 'status', 'ip', 'data.ip_info'])->toArray();
 
         foreach ($content['data'] as $key => $item) {
@@ -33,9 +36,9 @@ class SingleController
         }
         unset($content['data']);
 
-        $this->createJob("Request", $content, $mail->id);
+        $this->createJob('Request', $content, $mail->id);
 
-        $mail->status = "process";
+        $mail->status = 'process';
         $mail->save();
 
         return response('', 200);

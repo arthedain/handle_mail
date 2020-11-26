@@ -1,32 +1,36 @@
-Nova.booting((Vue, router, store) => {
+import mail from './store/mail'
+import metrika from './store/metrika'
 
-  router.addRoutes([
-    {
-      name: 'handle-mail',
-      path: '/handle-mail',
-      component: require('./components/Tool'),
-    },
-    {
-        name: 'handle-mail-single',
-        path: '/handle-mail/single/:id',
-        component: require('./components/SingleMail'),
-        props: true,
-    },
-    {
-        name: 'handle-mail-failed',
-        path: '/handle-mail/failed',
-        component: require('./components/Failed/List'),
-    },
-    {
-        name: 'handle-mail-failed-single',
-        path: '/handle-mail/failed/single/:id',
-        component: require('./components/Failed/Single'),
-        props: true,
-    },
-      {
-        name: 'handle-mail-metrika-index',
-        path: '/handle-mail/metrika',
-        component: require('./components/Metriks/Index'),
-    },
-  ])
+Nova.booting((Vue, router, store) => {
+    router.addRoutes([
+        {
+            name: 'handle-mail',
+            path: '/handle-mail',
+            component: require('./components/Index'),
+        },
+        {
+            name: 'handle-mail-single',
+            path: '/handle-mail/single/:id',
+            component: require('./components/SingleMail'),
+            props: true,
+        },
+        {
+            name: 'handle-mail-failed',
+            path: '/handle-mail/failed',
+            component: require('./components/Failed/List'),
+        },
+        {
+            name: 'handle-mail-failed-single',
+            path: '/handle-mail/failed/single/:id',
+            component: require('./components/Failed/Single'),
+            props: true,
+        },
+        {
+            name: 'handle-mail-metrika-index',
+            path: '/handle-mail/metrika',
+            component: require('./components/Metriks/Index'),
+        },
+    ])
+    store.registerModule('/handle-mail', mail);
+    store.registerModule('/metrika', metrika);
 })

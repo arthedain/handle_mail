@@ -17,7 +17,7 @@
                 {{__('Mail')}}
             </heading>
 
-            <button @click="resend" class="btn btn-default mr-2 btn-teal" style="margin-left: auto">
+            <button @click="openModal" class="btn btn-default mr-2 btn-teal" style="margin-left: auto">
                 {{__("Resend")}}
             </button>
             <button @click="openModal" class="btn btn-default mr-2 btn-danger" style="margin-left: auto">
@@ -94,7 +94,7 @@
         props: ['id'],
         components: {
             Modal,
-            Preloader
+            Preloader,
         },
         data(){
             return{
@@ -121,14 +121,15 @@
                 this.modalOpen = false;
             },
             remove(){
-                axios.post('/nova-vendor/handle-mail/delete/'+this.id).then((response) => {
-                    this.$toasted.show(this.__("Email deleted successfully"), {
-                        type: "success"
-                    });
-                    this.$router.push({name: 'handle-mail'});
-                }).catch((error) => {
-                    this.$toasted.show(this.__("Error"), { type: "error" });
-                });
+                console.log();
+                // axios.post('/nova-vendor/handle-mail/delete/'+this.id).then((response) => {
+                //     this.$toasted.show(this.__("Email deleted successfully"), {
+                //         type: "success"
+                //     });
+                //     this.$router.push({name: 'handle-mail'});
+                // }).catch((error) => {
+                //     this.$toasted.show(this.__("Error"), { type: "error" });
+                // });
             },
             resend(){
                 axios.post('/nova-vendor/handle-mail/resend/'+this.id)

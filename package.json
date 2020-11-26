@@ -16,9 +16,6 @@
     "dependencies": {
         "@amcharts/amcharts4": "^4.9.33",
         "@amcharts/amcharts4-geodata": "^4.1.16",
-        "echarts": "^4.8.0",
-        "v-charts": "^1.19.0",
-        "vue": "^2.6.11",
-        "vue-echarts": "^5.0.0-beta.0"
+        "vue": "^2.6.11"
     }
 }
