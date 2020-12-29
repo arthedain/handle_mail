@@ -80,7 +80,8 @@ class ToolServiceProvider extends ServiceProvider
             __DIR__.'/Mail/HandleMail.php' => app_path('/Mail/HandleMail.php'),
         ], 'mail');
         $this->publishes([
-            __DIR__.'/../resources/views/' => resource_path('/views/vendor/handle-mail/'),
+            __DIR__.'/../resources/views/mail.blade.php' => resource_path('/views/vendor/handle-mail/mail.blade.php'),
+            __DIR__.'/../resources/views/telegram/message.blade.php' => resource_path('/views/vendor/handle-mail/telegram/message.blade.php'),
         ], 'view');
         $this->publishes([
             __DIR__.'/../assets/handle-mail.js' => public_path('/assets/handle-mail.js'),
@@ -94,6 +95,7 @@ class ToolServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../resources/views/mail.blade.php' => resource_path('/views/vendor/handle-mail/mail.blade.php'),
+            __DIR__.'/../resources/views/telegram/message.blade.php' => resource_path('/views/vendor/handle-mail/telegram/message.blade.php'),
             __DIR__.'/../assets/handle-mail.js' => public_path('/assets/handle-mail.js'),
             __DIR__.'/../config/handle-mail.php' => config_path('handle-mail.php'),
             __DIR__.'/../database/migrations/create_handle_mails_table.php' => database_path('/migrations/'.date('Y_m_d_His', time()).'_create_handle_mails_table.php'),

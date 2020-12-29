@@ -16,8 +16,8 @@ class TelegramService
 
     public function sendMessage(DTO $formDTO)
     {
-        $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
-        $chat_id = env('TELEGRAM_CHAT_ID');
+        $telegram = new Api(env('TELEGRAM_BOT_TOKEN', ''));
+        $chat_id = env('TELEGRAM_CHAT_ID', '');
 
         $data = [];
 
