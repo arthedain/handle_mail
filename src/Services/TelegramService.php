@@ -3,18 +3,22 @@
 namespace Arthedain\HandleMail\Services;
 
 use Telegram\Bot\Api;
-use Arthedain\HandleMail\Classes\FormDTO;
+use Arthedain\HandleMail\Classes\DTO;
 
 class TelegramService
 {
     private Api $telegram;
+    private string $chat_id;
+    protected ConfigService $configService;
 
-    public function __construct()
+    public function __construct(ConfigService $configService)
     {
+        $this->configService = $configService;
         $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
+        $this->chat_id = env('TELEGRAM_CHAT_ID');
     }
 
-    public function sendMessage(FormDTO $formDTO)
+    public function sendMessage(DTO $formDTO)
     {
         $data = [];
 
@@ -25,7 +29,7 @@ class TelegramService
         $data['text'] = $formDTO->getText();
         $data['data'] = $formDTO->getData();
 
-        if (config('handle-mail.geo_in_email') && $formDTO->getGeo()) {
+        if ($this->configService->geoInEmail() && $formDTO->getGeo()) {
             $data['city'] = $formDTO->getGeo()['cityName'];
             $data['country'] = $formDTO->getGeo()['countryName'];
         }
@@ -34,7 +38,7 @@ class TelegramService
 
         $this->telegram
             ->setAsyncRequest(true)
-            ->sendMessage(['chat_id' => '-1001238861789', 'text' => $view]);
+            ->sendMessage(['chat_id' => $this->chat_id, 'text' => $view]);
     }
 
     public function getView(array $data)

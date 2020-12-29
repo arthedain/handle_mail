@@ -1,39 +1,16 @@
 <template>
     <div>
         <heading class="mb-6">{{__('Handle Mail')}}</heading>
-        <div class="flex">
-            <card class="w-1/4 flex flex-col items-center justify-center m-2" style="min-height: 100px">
-                <h4>{{__('New today')}}</h4>
-                <p>{{ getTodayMails }}</p>
-            </card>
-            <card class="w-1/4 flex flex-col items-center justify-center m-2" style="min-height: 100px">
-                <h4>{{__('Per month')}}</h4>
-                <p>{{ getMailForMonth }}</p>
-            </card>
-            <card class="w-1/4 flex flex-col items-center justify-center m-2" v-if="failedMails === 0"
-                  style="min-height: 100px">
-                <h4>{{__('Failed')}}</h4>
-                <p>{{ failedMails }}</p>
-            </card>
-            <router-link :to="{name: 'handle-mail-failed'}"
-                         class="w-1/4 card flex flex-col items-center justify-center m-2  failed-card link"
-                         v-if="failedMails > 0" style="min-height: 100px">
-                <h4>{{__('Failed')}}</h4>
-                <p>{{ failedMails }}</p>
-            </router-link>
-            <router-link :to="{name: 'handle-mail-metrika-index'}"
-                         class="w-1/4 card flex flex-col items-center justify-center m-2 card-link link"
-                         style="min-height: 100px">
-                <h4>{{__('Location')}}</h4>
-                <p>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                        <path class="heroicon-ui"
-                              d="M5.64 16.36a9 9 0 1 1 12.72 0l-5.65 5.66a1 1 0 0 1-1.42 0l-5.65-5.66zm11.31-1.41a7 7 0 1 0-9.9 0L12 19.9l4.95-4.95zM12 14a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
-                    </svg>
-                </p>
-            </router-link>
-        </div>
         <card class="flex flex-col m-2">
+            <div class="flex">
+                <div class="m-3">
+                    <h2 class="mb-1">Mails</h2>
+                    <h5 class="mr-2">Displays emails were sent from</h5>
+                </div>
+                <router-link :to="{name: 'handle-mail-metrika-index'}" class="m-3 ml-auto no-underline teal-link flex items-center">
+                    <h3 class="text-black teal-link">{{__('View details')}}</h3>
+                </router-link>
+            </div>
             <div class="chart" ref="chartdiv">
             </div>
         </card>
@@ -165,11 +142,11 @@
 </template>
 
 <script>
-    import Preloader from './templates/Preloader'
+    import Preloader from '../templates/Preloader'
     import * as am4core from "@amcharts/amcharts4/core";
     import * as am4charts from "@amcharts/amcharts4/charts";
     import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-    import TableFilter from "./templates/TableFilter";
+    import TableFilter from "../templates/TableFilter";
 
     am4core.useTheme(am4themes_animated);
 
@@ -189,7 +166,6 @@
         async mounted() {
             await this.fetchMails();
             await this.$store.dispatch('fetchChart');
-            await this.$store.dispatch('fetchFailedMails');
         },
         methods: {
             fetchMails(data = []) {
@@ -212,27 +188,19 @@
                     this.$toasted.show(this.__("Email deleted successfully"), {
                         type: "success"
                     });
-                    this.$store.dispatch('fetchMails');
                 }).catch((error) => {
                     this.$toasted.show(this.__("Error"), {type: "error"});
-                    this.$store.commit('updateLoading', false);
                 });
+                this.fetchMails();
             },
         },
         computed: {
-            failedMails() {
-                return this.$store.getters.getFailedMails;
-            },
+
             chartMails() {
                 return this.$store.getters.getChart;
             },
             mails() {
-                const mails = this.$store.getters.getMails;
-                // return mails.filter(item => {
-                //     return item.name.toLowerCase().includes(this.search.toLowerCase())
-                //         || item.email.toLowerCase().includes(this.search.toLowerCase());
-                // });
-                return mails;
+                return this.$store.getters.getMails;
             },
             loading() {
                 return this.$store.getters.loading;

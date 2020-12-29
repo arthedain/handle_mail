@@ -30,6 +30,7 @@ Route::post('/delete/{id}', 'Arthedain\HandleMail\Http\Controllers\IndexControll
  * Single mail
  */
 Route::get('/single/{id}', 'Arthedain\HandleMail\Http\Controllers\SingleController@single');
+Route::get('/view/single', 'Arthedain\HandleMail\Http\Controllers\SingleController@view');
 Route::post('/resend/{id}', 'Arthedain\HandleMail\Http\Controllers\SingleController@resend');
 
 /*
@@ -43,4 +44,8 @@ Route::post('/delete_failed/{id}', 'Arthedain\HandleMail\Http\Controllers\Failed
 /*
  * Metrika
  */
-Route::get('/get_map_data', 'Arthedain\HandleMail\Http\Controllers\MetrikaController@getMapData');
+Route::get('/get_map_data', 'Arthedain\HandleMail\Http\Controllers\MetrikaController@getByDate');
+Route::get('/metrika/get_all', 'Arthedain\HandleMail\Http\Controllers\MetrikaController@getAll');
+Route::get('/metrika/get_spam', 'Arthedain\HandleMail\Http\Controllers\MetrikaController@getSpam');
+
+Route::get('/metrika/users/{ip}', 'Arthedain\HandleMail\Http\Controllers\MetrikaController@getUser');

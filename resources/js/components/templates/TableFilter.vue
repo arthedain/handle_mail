@@ -2,6 +2,13 @@
     <div>
         <div class="flex ">
             <div class="btn-radio">
+                <!-- <input
+                    id="radio_0"
+                    type="checkbox"
+                    @change="changeSpam()"
+                    name="spam"
+                    checked
+                ><label for="radio_0" :class="['btn btn-default w-full mt-2 mr-2']">Spam</label> -->
                 <input
                     id="radio_1"
                     type="radio"
@@ -32,8 +39,14 @@
                     id="radio_5"
                     type="radio"
                     name="period"
+                    @change="$emit('change', quarterPeriod)"
+                ><label for="radio_5" :class="['btn btn-default w-full mt-2 mr-2']">3 month</label>
+                <input
+                    id="radio_6"
+                    type="radio"
+                    name="period"
                     @change="$emit('change', yearPeriod)"
-                ><label for="radio_5" :class="['btn btn-default w-full mt-2 mr-2']">Year</label>
+                ><label for="radio_6" :class="['btn btn-default w-full mt-2 mr-2']">Year</label>
             </div>
             <dropdown
                 dusk="filter-selector"
@@ -112,7 +125,9 @@
                 dayPeriod: {from: moment.utc().subtract(1, 'days').format('YYYY-MM-DD HH:mm:ss')},
                 monthPeriod: {from: moment.utc().subtract(30, 'days').format('YYYY-MM-DD HH:mm:ss')},
                 weeksPeriod: {from: moment.utc().subtract(14, 'days').format('YYYY-MM-DD HH:mm:ss')},
+                quarterPeriod: {from: moment.utc().subtract(3, 'months').format('YYYY-MM-DD HH:mm:ss')},
                 yearPeriod: {from: moment.utc().subtract(1, 'years').format('YYYY-MM-DD HH:mm:ss')},
+                spam: false,
             }
         },
         methods: {
@@ -142,7 +157,18 @@
             },
             changeCheckedPeriod(status) {
                 this.$refs.allData.checked = status;
-            }
+            },
+            changeSpam() {
+                this.spam = !this.spam;
+
+                let data = {spam: null};
+                
+                if(this.spam) {
+                    data = {spam: 0};
+                }
+                
+                this.$emit('change', data);
+            },
         },
     }
 </script>
@@ -153,11 +179,10 @@
         justify-content: center;
     }
 
-    .btn-radio input[type="radio"] {
+    .btn-radio input {
         opacity: 0;
         position: fixed;
         width: 0;
-
     }
 
     .btn-radio label {
@@ -169,7 +194,7 @@
         cursor: pointer;
     }
 
-    .btn-radio input[type="radio"]:checked + label {
+    .btn-radio input:checked + label {
         background-color: #38b2ac;
     }
 </style>

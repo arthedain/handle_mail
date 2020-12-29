@@ -34,25 +34,25 @@ class ChartService
         return $collection;
     }
 
-    public function mapData(EloquentCollection $collection): Collection
-    {
-        $data = collect();
-
-        foreach ($collection as $item) {
-            if (isset($item->data['ip_info']) && $item->data['ip_info']) {
-                $element = collect($item->data['ip_info']);
-            } else {
-                $element = $this->location->get($item->ip);
-            }
-
-            if ($element) {
-                $element = $element->toArray();
-                $element['id'] = $item->id;
-                $element['created_at'] = Carbon::parse($item->created_at)->toDateTimeString();
-                $data->push($element);
-            }
-        }
-
-        return $data;
-    }
+//    public function mapData(EloquentCollection $collection): Collection
+//    {
+//        $data = collect();
+//
+//        foreach ($collection as $item) {
+//            if (isset($item->ip_info) && $item->ip_info) {
+//                $element = collect($item->ip_info);
+//            } else {
+//                $element = $this->location->get($item->ip);
+//            }
+//
+//            if ($element) {
+//                $element = $element->toArray();
+//                $element['id'] = $item->id;
+//                $element['created_at'] = Carbon::parse($item->created_at)->toDateTimeString();
+//                $data->push($element);
+//            }
+//        }
+//
+//        return $data;
+//    }
 }

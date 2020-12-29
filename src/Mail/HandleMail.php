@@ -14,15 +14,20 @@ class HandleMail extends Mailable
 
     public $content;
 
+    public $view;
+
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param string $subject
+     * @param array  $content
+     * @param string $view
      */
-    public function __construct($subject = '', $content = '')
+    public function __construct(string $subject = '', array $content = [], string $view = 'vendor.handle-mail.mail')
     {
         $this->subject = $subject;
         $this->content = $content;
+        $this->view = $view;
     }
 
     /**
@@ -32,8 +37,6 @@ class HandleMail extends Mailable
      */
     public function build()
     {
-        $view = config('handle-mail.view', 'vendor.handle-mail.mail');
-
-        return $this->view($view, ['subject' => $this->subject, 'content' => $this->content]);
+        return $this->view($this->view, ['subject' => $this->subject, 'content' => $this->content]);
     }
 }

@@ -30,15 +30,16 @@ class HandleMailJob implements ShouldQueue
      * @param string $subject
      * @param array  $content
      * @param string $email
+     * @param string $view
      * @param string $id
      */
-    public function __construct(string $subject, array $content, string $email, string $id = '0')
+    public function __construct(string $subject, array $content, string $email, string $view, string $id = '0')
     {
         $this->subject = $subject;
         $this->content = $content;
         $this->id = $id;
         $this->email = $email;
-        $this->view = $view = config('handle-mail.view', 'vendor.handle-mail.mail');
+        $this->view = $view;
     }
 
     /**
@@ -48,6 +49,6 @@ class HandleMailJob implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->email)->send(new HandleMail($this->subject, $this->content));
+        Mail::to($this->email)->send(new HandleMail($this->subject, $this->content, $this->view));
     }
 }

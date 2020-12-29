@@ -66,3 +66,9 @@ canvas{
 .btn{
     white-space: nowrap;
 }
+.border-teal{
+    border-color: $main;
+}
+.teal-link:hover {
+    color: $main;
+}

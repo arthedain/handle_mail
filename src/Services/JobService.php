@@ -2,30 +2,32 @@
 
 namespace Arthedain\HandleMail\Services;
 
-use Illuminate\Support\Facades\Artisan;
 use Arthedain\HandleMail\Models\FailedJobs;
 use Arthedain\HandleMail\Models\HandleMail;
 use Arthedain\HandleMail\Jobs\HandleMailJob;
 
 class JobService
 {
-    /**
-     * @param string $subject
-     * @param array  $content
-     * @param string $id
-     */
+    private ArtisanService $artisanService;
+
+    private ConfigService $configService;
+
+    public function __construct(ArtisanService $artisanService, ConfigService $configService)
+    {
+        $this->artisanService = $artisanService;
+        $this->configService = $configService;
+    }
+
     public function create(string $subject, array $content, string $id): void
     {
-        $emails = config('handle-mail.email', []);
+        $emails = $this->configService->email();
+        $view = $this->configService->view();
 
         foreach ($emails as $email) {
-            HandleMailJob::dispatch($subject, $content, $email, $id)->onQueue('handle-mail');
+            HandleMailJob::dispatch($subject, $content, $email, $view, $id)->onQueue('handle-mail');
         }
     }
 
-    /**
-     * @param string $id
-     */
     public function retryJob(string $id): void
     {
         $job = FailedJobs::where('id', $id)->first();
@@ -34,7 +36,7 @@ class JobService
             'status' => 'process',
         ]);
 
-        Artisan::call("queue:retry {$id}");
+        $this->artisanService->queueRetry($id);
     }
 
     public function retryAllJob(): void
@@ -50,14 +52,9 @@ class JobService
             'status' => 'process',
         ]);
 
-        Artisan::call('queue:retry all');
+        $this->artisanService->queueRetry();
     }
 
-    /**
-     * @param string $id
-     *
-     * @return bool
-     */
     public function delete(string $id): bool
     {
         if (FailedJobs::where('id', $id)->delete()) {

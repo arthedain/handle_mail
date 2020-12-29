@@ -18,18 +18,6 @@ export default {
             const {data} = await axios.get('/nova-vendor/handle-mail/failed_count');
             commit('updateFailedMails', data.count);
         },
-        // async deleteMail({commit, dispatch}, id) {
-        //     commit('updateLoading', true);
-        //     await axios.post('/nova-vendor/handle-mail/delete/' + id).then((response) => {
-        //         this.$toasted.show(this.__("Email deleted successfully"), {
-        //             type: "success"
-        //         });
-        //         dispatch('fetchMails');
-        //     }).catch((error) => {
-        //         this.$toasted.show(this.__("Error"), {type: "error"});
-        //         commit('updateLoading', false);
-        //     });
-        // },
     },
     mutations: {
         updateMails(state, mails) {

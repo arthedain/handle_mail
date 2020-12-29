@@ -4,7 +4,7 @@ namespace Arthedain\HandleMail\Services;
 
 use Carbon\Carbon;
 use Stevebauman\Location\Location;
-use Arthedain\HandleMail\Classes\FormDTO;
+use Arthedain\HandleMail\Classes\DTO;
 use Arthedain\HandleMail\Models\HandleMail;
 
 class MailService
@@ -16,12 +16,7 @@ class MailService
         $this->location = $location;
     }
 
-    /**
-     * @param FormDTO $formDTO
-     *
-     * @return HandleMail
-     */
-    public function create(FormDTO $formDTO): HandleMail
+    public function create(DTO $formDTO): HandleMail
     {
         $inputs = [];
         $ip = $formDTO->getIp();
@@ -34,16 +29,13 @@ class MailService
         $inputs['data'] = $formDTO->getData();
         $inputs['ip'] = $ip;
         $inputs['status'] = 'process';
-        $inputs['data']['ip_info'] = $this->location->get($ip);
+        $inputs['ip_info'] = $this->location->get($ip);
+        $inputs['spam'] = $formDTO->getSpam();
+        $inputs['history'] = $formDTO->getHistory();
 
         return HandleMail::create($inputs);
     }
 
-    /**
-     * @param string $id
-     *
-     * @return bool
-     */
     public function delete(string $id): bool
     {
         if (HandleMail::where('id', $id)->delete()) {
@@ -53,11 +45,6 @@ class MailService
         return false;
     }
 
-    /**
-     * @param HandleMail $collection
-     *
-     * @return array
-     */
     public function prepareMail(HandleMail $collection): array
     {
         $data = collect($collection->toArray())->except(['updated_at']);

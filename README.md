@@ -68,17 +68,11 @@ Route for request  ```/handle-mail/send```. Route name ``handle-mail.send``
 
 If you need to execute code before sending mail, you can change the path and call the method:
 ```$xslt
-namespace Arthedain\HandleMail\Http\Controllers\User;
+namespace Arthedain\HandleMail\Senders;
 
-class HandleMailController
+class MailSender
 {
-    /**
-     * @param Request $request
-     * @param string $subject
-     * @param null $callback
-     * @return \Illuminate\Http\Response
-     */
-    public function post(Request $request, string $subject = 'Request', $callback = null)
+    public function send(Request $request, string $subject = 'Request')
 ```
 <br>
 
@@ -93,7 +87,58 @@ After publish default files you can change mail template in ```resource/views/ve
 
 ------------------
 
+### Telegram
+The package includes tools for sending emails to Telegram.
+To send letters to Telegram, you need to change the setting ``telegram`` in the file ``config\handle-mail`` 
+First, you need to create a Telegram bot via @BotFather. After creating a bot, you need to add a token and chat ID in the ``.env`` file:
+````
+TELEGRAM_BOT_TOKEN=XXXX:XXXXXXXXXXXX 
+TELEGRAM_CHAT_ID=XXXXXXXXXX
+````
 
+>You can use @userinfobot to get the ID.
+>For private chats, the ID must be obtained through the url in the web version of the telegram: for example, the url `web.telegram.org/#/im?p=c123456789_XXXXXXXXXXXX`, you need to take the first part and add `-100`. The result should be `-100123456789`
+
+### Spam filter
+The package `spatie/laravel-honeypot` is used to filter spam. You can read the full documentation [here](https://github.com/spatie/laravel-honeypot).
+To use the spam filter add `@honeypot`:
+```
+<form method="POST" action="/mail">
+    @honeypot
+    <input name="email" type="text">
+</form>
+```
+
+In the published config file `config\honeypot`, replace the value `respond_to_spam_with`:
+```
+/*
+ * This class is responsible for sending a response to requests that
+ * are detected as being spammy. By default a blank page is shown.
+ *
+ * A valid responder is any class that implements
+ * `Spatie\Honeypot\SpamResponder\SpamResponder`
+ */
+'respond_to_spam_with' => Arthedain\HandleMail\SpamFilter\HandlePageResponder::class
+```
+>Or execute the command: `php artisan vendor:publish --provider="Arthedain\HandleMail\ToolServiceProvider" --tag="config-honeypot" --force`
+
+Then add `Spatie\Honeypot\ProtectAgainstSpam` middleware to the post route
+```
+Route::post('/send_message', 'Controller@sendMessage')->middleware(ProtectAgainstSpam::class);
+```
+
+### User history
+User history allows you to save the history of the user's page visits before sending messages.
+
+Activated in the config file `config\handle-mail`:
+```
+'history' => false,
+```
+To work with history, you can use the class `Arthedain\HandleMail\HistoryHandle\HandleMailHistory::class`, or create your own class, the handler must implement the interface `Arthedain\HandleMail\HistoryHandle\Interfaces\History::class`.
+If you use your own handler class, you need to change the class in the config file `config\handle-mail`.
+```
+'history_class' => Arthedain\HandleMail\HistoryHandle\HandleMailHistory::class,
+```
 
 ### Tool localization
 

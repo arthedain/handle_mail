@@ -2,7 +2,7 @@
 
 namespace Arthedain\HandleMail\Classes;
 
-class FormDTO
+class FormDTO implements DTO
 {
     private ?string $page;
 
@@ -19,6 +19,10 @@ class FormDTO
     private ?array $data;
 
     private ?array $geo;
+
+    private int $spam = 0;
+
+    private ?array $history = null;
 
     public function setPage(?string $page): self
     {
@@ -116,6 +120,30 @@ class FormDTO
     public function setGeo(?array $geo): self
     {
         $this->geo = $geo;
+
+        return $this;
+    }
+
+    public function getSpam(): int
+    {
+        return $this->spam;
+    }
+
+    public function setSpam(int $spam): self
+    {
+        $this->spam = $spam;
+
+        return $this;
+    }
+
+    public function getHistory(): ?array
+    {
+        return $this->history;
+    }
+
+    public function setHistory(?array $history): self
+    {
+        $this->history = $history;
 
         return $this;
     }

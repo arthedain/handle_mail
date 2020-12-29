@@ -2,29 +2,51 @@
 
 namespace Arthedain\HandleMail\Http\Controllers;
 
-use Arthedain\HandleMail\Models\HandleMail;
-use Arthedain\HandleMail\Services\ChartService;
-use Carbon\Carbon;
+use Arthedain\HandleMail\Repositories\HandleMailRepository;
 use Illuminate\Http\Request;
 
 class MetrikaController
 {
-    public function getMapData(Request $request, ChartService $chartService)
+    protected HandleMailRepository $handleMailRepository;
+
+    public function __construct(HandleMailRepository $handleMailRepository)
     {
-        $mails = HandleMail::orderBy('id', 'desc');
+        $this->handleMailRepository = $handleMailRepository;
+    }
 
-        if ($request->from) {
-            $mails = $mails->from(Carbon::parse($request->from));
-        }
+    public function getByDate(Request $request)
+    {
+        $mails = $this->handleMailRepository->getByDate($request->from, $request->to, 0);
 
-        if ($request->to) {
-            $mails = $mails->to(Carbon::parse($request->to));
-        }
+        return response()->json([
+            'mails' => $mails->toArray(),
+        ]);
+    }
 
-        $mails = $mails->get(['id', 'data', 'ip', 'created_at']);
+    public function getAll()
+    {
+        $mails = $this->handleMailRepository->all();
 
-        $data = $chartService->mapData($mails);
+        return response()->json([
+            'mails' => $mails,
+        ]);
+    }
 
-        return response()->json($data->toArray());
+    public function getSpam(Request $request)
+    {
+        $mails = $this->handleMailRepository->getByDate($request->from, $request->to, 1);
+
+        return response()->json([
+            'mails' => $mails,
+        ]);
+    }
+
+    public function getUser(Request $request)
+    {
+        $user = $this->handleMailRepository->getByIp($request->ip);
+
+        return response()->json([
+            'user' => $user,
+        ]);
     }
 }

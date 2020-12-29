@@ -14,4 +14,7 @@ return [
     'telegram' => false,
 
     'geo_in_email' => false,
+
+    'history' => false,
+    'history_class' => Arthedain\HandleMail\HistoryHandle\HandleMailHistory::class,
 ];

@@ -16,13 +16,16 @@ class CreateHandleMailsTable extends Migration
         Schema::create('handle_mails', function (Blueprint $table) {
             $table->id();
             $table->text('page');
-            $table->string('name')->nullable();
-            $table->string('email')->nullable();
-            $table->string('phone')->nullable();
+            $table->text('name')->nullable();
+            $table->text('email')->nullable();
+            $table->text('phone')->nullable();
             $table->text('text')->nullable();
             $table->text('data')->nullable();
             $table->string('ip')->nullable();
+            $table->text('ip_info')->nullable();
             $table->string('status')->nullable();
+            $table->string('spam')->nullable()->default(0);
+            $table->mediumText('history')->nullable();
             $table->timestamps();
         });
     }

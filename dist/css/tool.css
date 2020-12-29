@@ -85,3 +85,11 @@ canvas {
   white-space: nowrap;
 }
 
+.border-teal {
+  border-color: #38b2ac;
+}
+
+.teal-link:hover {
+  color: #38b2ac;
+}
+

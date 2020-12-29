@@ -1,7 +1,5 @@
 <template>
     <div>
-<!--        <pre>{{ loadingState }}</pre>-->
-<!--        <pre>{{ mails }}</pre>-->
         <div class="flex mb-6">
             <router-link :to="{name: 'handle-mail'}">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -20,85 +18,93 @@
                 {{__('Metrika')}}
             </heading>
         </div>
-        <card class="w-full map">
-            <preloader v-show="loading" class="map"></preloader>
-            <div id="chartdiv" v-show="!loading" class="map">
-            </div>
-        </card>
-
-        <card class="mt-3">
-            <div class="flex justify-between">
-                <div class="relative z-50 w-full max-w-xs mt-2 ml-2">
-                    <div class="relative">
-                        <div class="relative h-9 flex-no-shrink mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
-                                 aria-labelledby="search" role="presentation"
-                                 class="fill-current absolute search-icon-center ml-3 text-80">
-                                <path fill-rule="nonzero"
-                                      d="M14.32 12.906l5.387 5.387a1 1 0 0 1-1.414 1.414l-5.387-5.387a8 8 0 1 1 1.414-1.414zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"></path>
-                            </svg>
-                            <input type="search" v-model="search" placeholder="Нажмите / для поиска"
-                                   class="appearance-none form-search w-search pl-search shadow mail-search">
-                        </div>
-                    </div>
+        <div class="flex">
+            <div class="flex w-full mb-2" style="height: 500px">
+                <div class="flex flex-wrap w-1/4 ml-0">
+                    <card class="w-full m-2 ml-0 mt-0 flex flex-col items-center justify-center">
+                        <h1>{{ todayMails }}</h1>
+                        <h4>{{__('Today mails')}}</h4>
+                    </card>
+                    <card class="w-full m-2 ml-0 flex flex-col items-center justify-center">
+                        <h1>{{ mailsPerMonth }}</h1>
+                        <h4>{{__('Per month')}}</h4>
+                    </card>
                 </div>
-                <table-filter
-                    class="mr-2"
-                    @change="fetchData"
-                />
+                <div class="flex flex-wrap w-1/4 mr-2">
+                    <card class="w-full m-2 p-4 mt-0 mr-0 flex flex-col items-center justify-center">
+                        <h1>{{ allTimeMails }}</h1>
+                        <h4>{{__('All time')}}</h4>
+                    </card>
+                    <card class="w-full p-2 m-2 mr-0 flex flex-col items-center justify-center">
+                        <h1>{{ mediumPageView }}</h1>
+                        <h4 class="w-3/4 text-center">{{__('Average number of pages before sending a letter')}}</h4>
+                    </card>
+                </div>
+                <card class="w-1/2 ml-2 mb-2">
+                    <pie-chart :pieMails="pieMails"></pie-chart>
+                </card>
             </div>
-            <preloader v-if="loading" class="map"></preloader>
-            <table class="table w-full" v-if="!loading">
-                <thead>
-                <tr>
-                    <th class="w-8">&nbsp;</th>
-                    <th class="text-left px-4 py-2">IP</th>
-                    <th class="text-left px-4 py-2">Country</th>
-                    <th class="text-left px-4 py-2">Region</th>
-                    <th class="text-left px-4 py-2">City</th>
-                    <th class="text-left px-4 py-2">created_at</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="item in paginatedData">
-                    <td></td>
-                    <td class="px-4 py-2">{{ item.ip }}</td>
-                    <td class="px-4 py-2">{{ __(item.countryName) }}</td>
-                    <td class="px-4 py-2">{{ __(item.regionName) }}</td>
-                    <td class="px-4 py-2">{{ __(item.cityName) }}</td>
-                    <td class="px-4 py-2">{{ __(item.created_at) }}</td>
-                    <td class="td-fit text-right pr-6 align-middle">
-                        <router-link :to="{name: 'handle-mail-single', params: {id:item.id}}"
-                                     class="cursor-pointer text-70 teal-hover mr-3 inline-flex items-center has-tooltip">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
-                                 class="fill-current">
-                                <path
-                                    d="M17.56 17.66a8 8 0 0 1-11.32 0L1.3 12.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95zm-9.9-1.42a6 6 0 0 0 8.48 0L20.38 12l-4.24-4.24a6 6 0 0 0-8.48 0L3.4 12l4.25 4.24zM11.9 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
-                            </svg>
-                        </router-link>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="bg-20 rounded-b" per-page="25" resource-count-label="1-25 из 59" current-resource-count="25"
-                 all-matching-resource-count="59">
-                <nav class="flex justify-between items-center">
-                    <button :disabled="pageNumber==0" @click="previousPage" rel="prev" dusk="previous"
-                            class="btn btn-link py-3 px-4 teal dim">
-                        {{__('Previous')}}
-                    </button>
-                    <span class="text-sm text-80 px-4">
-                            {{ __('total') }} {{ data.length }}
-                        <!--                        {{ pageNumber === 0 ? 1 : paginationFrom() }} - {{ paginationTo() <= paginatedData.length ? paginationTo() : data.length }} {{ __('of') }} {{ data.length }}-->
-                    </span>
-                    <button rel="next" dusk="next" @click="nextPage" :disabled="pageNumber >= pageCount() -1"
-                            class="btn btn-link py-3 px-4 teal dim">
-                        {{__('Next')}}
-                    </button>
-                </nav>
+            <!--            <router-link :to="{name: 'handle-mail-metrika-pages'}" class="card w-1/2 ml-2 mb-4">-->
+            <!--                <bar-chart :barData="barMails"></bar-chart>-->
+            <!--            </router-link>-->
+        </div>
+<!--        -->
+<!--        -->
+<!--        -->
+        <div class="flex">
+            <card class="w-1/2 flex flex-col mr-2">
+                <div class="flex">
+                    <div class="m-3">
+                        <h2 class="mb-1">Map</h2>
+                        <h5 class="">Displays where emails were sent from</h5>
+                    </div>
+                    <router-link :to="{name: 'handle-mail-metrika-map'}" class="m-3 ml-auto no-underline teal-link flex items-center">
+                        <h3 class="text-black teal-link">{{__('View details')}}</h3>
+                    </router-link>
+                </div>
+                <preloader v-show="loading" class="map"></preloader>
+                <div id="chartdiv" v-show="!loading" class="map">
+                </div>
+            </card>
+            <div class="flex flex-wrap w-1/4">
+                <router-link :to="{name: 'handle-mail-failed'}" :class="['card w-full m-2 mt-0 flex flex-col items-center justify-center card-link link', failedMails > 0 ? 'failed-card' : '']">
+                    <h3>{{__('Failed')}}</h3>
+                    <p>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30">
+                            <path class="heroicon-ui" stroke="#22292f" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16zm0 9a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0v4a1 1 0 0 1-1 1zm0 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                        </svg>
+                    </p>
+                </router-link>
+               <router-link :to="{name: 'handle-mail-metrika-pages'}" class="card w-full m-2 mb-0 mt-0 flex flex-col items-center justify-center card-link link">
+
+                   <h3>{{__('Pages')}}</h3>
+                   <p>
+                       <svg fill="none" viewBox="0 0 24 24" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M11 3.05493C6.50005 3.55238 3 7.36745 3 12C3 16.9706 7.02944 21 12 21C16.6326 21 20.4476 17.5 20.9451 13H11V3.05493Z" stroke="#22292f" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                           <path d="M20.4878 9H15V3.5123C17.5572 4.41613 19.5839 6.44285 20.4878 9Z" stroke="#22292f" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                       </svg>
+                   </p>
+              </router-link>
             </div>
-        </card>
+            <div class="flex flex-wrap w-1/4">
+                <router-link :to="{name: 'handle-mail-metrika-spam'}" class="card w-full m-2 mt-0 mr-0 mb-0 flex flex-col items-center justify-center card-link link">
+                    <h4>{{__('Spam')}}</h4>
+                    <p>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="30">
+                            <path fill="none" id="svg_1" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="#22292f" d="m18.364,18.364c3.5147,-3.5148 3.5147,-9.21324 0,-12.72796c-3.5148,-3.51472 -9.21324,-3.51472 -12.72796,0m12.72796,12.72796c-3.5148,3.5147 -9.21324,3.5147 -12.72796,0c-3.51472,-3.5148 -3.51472,-9.21324 0,-12.72796m12.72796,12.72796l-12.72796,-12.72796"/>
+                        </svg>
+                    </p>
+                </router-link>
+               <router-link :to="{name: 'handle-mail-metrika-users'}" class="card w-full m-2 mb-0 mr-0 flex flex-col items-center justify-center card-link link">
+                   <h3>{{__('Users')}}</h3>
+                   <p>
+                       <svg fill="none" viewBox="0 0 24 24" width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M17 20H22V18C22 16.3431 20.6569 15 19 15C18.0444 15 17.1931 15.4468 16.6438 16.1429M17 20H7M17 20V18C17 17.3438 16.8736 16.717 16.6438 16.1429M7 20H2V18C2 16.3431 3.34315 15 5 15C5.95561 15 6.80686 15.4468 7.35625 16.1429M7 20V18C7 17.3438 7.12642 16.717 7.35625 16.1429M7.35625 16.1429C8.0935 14.301 9.89482 13 12 13C14.1052 13 15.9065 14.301 16.6438 16.1429M15 7C15 8.65685 13.6569 10 12 10C10.3431 10 9 8.65685 9 7C9 5.34315 10.3431 4 12 4C13.6569 4 15 5.34315 15 7ZM21 10C21 11.1046 20.1046 12 19 12C17.8954 12 17 11.1046 17 10C17 8.89543 17.8954 8 19 8C20.1046 8 21 8.89543 21 10ZM7 10C7 11.1046 6.10457 12 5 12C3.89543 12 3 11.1046 3 10C3 8.89543 3.89543 8 5 8C6.10457 8 7 8.89543 7 10Z" stroke="#22292f" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                       </svg>
+                   </p>
+                </router-link>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -109,6 +115,8 @@
     import am4themes_animated from "@amcharts/amcharts4/themes/animated";
     import Preloader from "../templates/Preloader";
     import TableFilter from "../templates/TableFilter";
+    import PieChart from "../templates/Metriks/PieChart";
+    import BarChart from "../templates/Metriks/BarChart";
 
     am4core.useTheme(am4themes_animated);
 
@@ -116,11 +124,11 @@
         components: {
             TableFilter,
             Preloader,
+            PieChart,
+            BarChart,
         },
         data() {
             return {
-                // data: [],
-                // loading: true,
                 pageNumber: 0,
                 size: 20,
                 search: '',
@@ -128,55 +136,85 @@
             }
         },
         async mounted() {
-            // axios.get('/nova-vendor/handle-mail/get_map_data').then((response) => {
-            //     this.loading = false;
-            //     this.data = response.data;
-            //     this.initMap();
-            // });
             await this.fetchData();
-            // this.initMap();
+            await this.$store.dispatch('fetchMetrikaAllMails');
+            await this.fetchMails();
+            await this.$store.dispatch('fetchFailedMails');
         },
 
         methods: {
-            fetchData(data = '') {
-                this.$store.dispatch('fetchMetrikaMails', data);
+            fetchData() {
+                this.$store.dispatch('fetchMetrikaMails');
             },
-            nextPage() {
-                this.pageNumber++;
-            },
-            previousPage() {
-                this.pageNumber--;
-            },
-            pageCount() {
-                let l = this.data.length,
-                    s = this.size;
-
-                return Math.ceil(l / s);
-            },
-            paginationFrom() {
-                return this.pageNumber * this.size;
-            },
-            paginationTo() {
-                return (this.pageNumber * this.size) + this.size;
+            fetchMails() {
+                this.$store.dispatch('fetchMails', {page_url: false, parameters: []});
             }
         },
 
         computed: {
+            failedMails() {
+                return this.$store.getters.getFailedMails;
+            },
             data() {
                 return this.$store.getters.getMetrikaMails;
             },
-            loading(){
+            loading() {
                 return this.$store.getters.loading;
             },
-            paginatedData() {
-                const start = this.pageNumber * this.size,
-                    end = start + this.size;
-                return this.data.filter(item => {
-                    return item.cityName.toLowerCase().includes(this.search.toLowerCase())
-                        || item.countryName.toLowerCase().includes(this.search.toLowerCase());
-                }).slice(start, end);
+            pieMails() {
+                let data = this.$store.getters.getMetrikaAllMails;
+                data = _.groupBy(data, 'ip_info.countryName');
+                data = _.map(data, (item, key) => {
+                    return {
+                        "country": key,
+                        "count": item.length,
+                    };
+                })
+                return data;
             },
+            barMails() {
+                let data = this.$store.getters.getMetrikaBarMails;
+                if (data.length > 5) {
+                    data = _.slice(data, 0, 5);
+                }
+                return data;
+            },
+            mails() {
+                return this.$store.getters.getMails;
+            },
+            mailsPerMonth() {
+                let data = _.filter(this.mails, item => {
+                    let date = moment(item.created_at).format('ll');
+                    return moment(date).isSameOrAfter(moment().subtract(30, 'days').format('ll'));
+                });
+                return data.length;
+            },
+            todayMails() {
+                let data = this.mails.filter(function (item) {
+                    let date = moment(item.created_at).format('ll');
+                    return moment(date).isSame(moment().format('ll'));
+                });
+                return data.length;
+            },
+            allTimeMails() {
+                return this.mails.length;
+            },
+            mediumPageView() {
+                let data = [];
+                let count = 0;
+                _.forEach(this.mails, item => {
+                    if(item.history) {
+                        data.push(item.history.length);
+                        count += item.history.length;
+                    }
+                });
 
+                if(count > 0 && data.length > 0) {
+                    return Math.round(count / data.length);
+                }
+
+                return 0;
+            }
         },
         watch: {
             data() {
@@ -248,6 +286,6 @@
 <style scoped>
     .map {
         width: 100%;
-        height: 800px;
+        height: 500px;
     }
 </style>

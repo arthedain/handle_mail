@@ -1,6 +1,6 @@
 webpackJsonp([2],{
 
-/***/ 521:
+/***/ 562:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, Buffer, process) {/*! xlsx.js (C) 2013-present SheetJS -- http://sheetjs.com */
@@ -14,8 +14,8 @@ var current_codepage = 1200, current_ansi = 1252;
 /*global cptable:true, window */
 if(true) {
 	if(typeof cptable === 'undefined') {
-		if(typeof global !== 'undefined') global.cptable = __webpack_require__(630);
-		else if(typeof window !== 'undefined') window.cptable = __webpack_require__(630);
+		if(typeof global !== 'undefined') global.cptable = __webpack_require__(671);
+		else if(typeof window !== 'undefined') window.cptable = __webpack_require__(671);
 	}
 }
 
@@ -1342,7 +1342,7 @@ function parse_extra_field(blob) {
 	return o;
 }
 var fs;
-function get_fs() { return fs || (fs = __webpack_require__(631)); }
+function get_fs() { return fs || (fs = __webpack_require__(672)); }
 function parse(file, options) {
 if(file[0] == 0x50 && file[1] == 0x4b) return parse_zip(file, options);
 if(file.length < 512) throw new Error("CFB file size " + file.length + " < 512");
@@ -2588,7 +2588,7 @@ return exports;
 
 if("function" !== 'undefined' && typeof module !== 'undefined' && typeof DO_NOT_EXPORT_CFB === 'undefined') { module.exports = CFB; }
 var _fs;
-if(true) try { _fs = __webpack_require__(631); } catch(e) {}
+if(true) try { _fs = __webpack_require__(672); } catch(e) {}
 
 /* normalize data for blob ctor */
 function blobify(data) {
@@ -2856,7 +2856,7 @@ var jszip;
 if(typeof JSZipSync !== 'undefined') jszip = JSZipSync;
 if(true) {
 	if(typeof module !== 'undefined' && module.exports) {
-		if(typeof jszip === 'undefined') jszip = __webpack_require__(720);
+		if(typeof jszip === 'undefined') jszip = __webpack_require__(761);
 	}
 }
 
@@ -3518,7 +3518,7 @@ var make_offcrypto = function(O, _crypto) {
 	var crypto;
 	if(typeof _crypto !== 'undefined') crypto = _crypto;
 	else if(true) {
-		try { crypto = __webpack_require__(722); }
+		try { crypto = __webpack_require__(763); }
 		catch(e) { crypto = null; }
 	}
 
@@ -21321,7 +21321,7 @@ return utils;
 })(utils);
 
 if(has_buf && "function" != 'undefined') (function() {
-	var Readable = __webpack_require__(723).Readable;
+	var Readable = __webpack_require__(764).Readable;
 
 	var write_csv_stream = function(sheet, opts) {
 		var stream = Readable();
@@ -21463,11 +21463,11 @@ else make_xlsx_lib(XLSX);
 /*exported XLS, ODS */
 var XLS = XLSX, ODS = XLSX;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(535), __webpack_require__(585).Buffer, __webpack_require__(543)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(576), __webpack_require__(626).Buffer, __webpack_require__(584)))
 
 /***/ }),
 
-/***/ 535:
+/***/ 576:
 /***/ (function(module, exports) {
 
 var g;
@@ -21495,7 +21495,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 543:
+/***/ 584:
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -21686,7 +21686,7 @@ process.umask = function() { return 0; };
 
 /***/ }),
 
-/***/ 585:
+/***/ 626:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21700,9 +21700,9 @@ process.umask = function() { return 0; };
 
 
 
-var base64 = __webpack_require__(717)
-var ieee754 = __webpack_require__(718)
-var isArray = __webpack_require__(719)
+var base64 = __webpack_require__(758)
+var ieee754 = __webpack_require__(759)
+var isArray = __webpack_require__(760)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -23480,11 +23480,11 @@ function isnan (val) {
   return val !== val // eslint-disable-line no-self-compare
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(535)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(576)))
 
 /***/ }),
 
-/***/ 630:
+/***/ 671:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {/* cpexcel.js (C) 2013-present SheetJS -- http://sheetjs.com */
@@ -24993,18 +24993,18 @@ if (typeof module !== 'undefined' && module.exports && typeof DO_NOT_EXPORT_CODE
   return cpt;
 }));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(585).Buffer))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(626).Buffer))
 
 /***/ }),
 
-/***/ 631:
+/***/ 672:
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
 
-/***/ 717:
+/***/ 758:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25164,7 +25164,7 @@ function fromByteArray (uint8) {
 
 /***/ }),
 
-/***/ 718:
+/***/ 759:
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -25255,7 +25255,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 /***/ }),
 
-/***/ 719:
+/***/ 760:
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -25267,7 +25267,7 @@ module.exports = Array.isArray || function (arr) {
 
 /***/ }),
 
-/***/ 720:
+/***/ 761:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer, global) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*
@@ -25286,7 +25286,7 @@ Note: since JSZip 3 removed critical functionality, this version assigns to the
 */
 (function(e){
 	if("object"==typeof exports&&"undefined"!=typeof module&&"undefined"==typeof DO_NOT_EXPORT_JSZIP)module.exports=e();
-	else if("function"=="function"&&__webpack_require__(721)&&"undefined"==typeof DO_NOT_EXPORT_JSZIP){JSZipSync=e();!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (e),
+	else if("function"=="function"&&__webpack_require__(762)&&"undefined"==typeof DO_NOT_EXPORT_JSZIP){JSZipSync=e();!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (e),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));}
@@ -34273,11 +34273,11 @@ module.exports = ZStream;
 (9)
 }));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(585).Buffer, __webpack_require__(535)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(626).Buffer, __webpack_require__(576)))
 
 /***/ }),
 
-/***/ 721:
+/***/ 762:
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -34287,14 +34287,14 @@ module.exports = __webpack_amd_options__;
 
 /***/ }),
 
-/***/ 722:
+/***/ 763:
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
 
-/***/ 723:
+/***/ 764:
 /***/ (function(module, exports) {
 
 /* (ignored) */

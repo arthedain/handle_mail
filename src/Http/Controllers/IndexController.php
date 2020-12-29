@@ -2,6 +2,7 @@
 
 namespace Arthedain\HandleMail\Http\Controllers;
 
+use Arthedain\HandleMail\Repositories\HandleMailRepository;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
@@ -12,16 +13,16 @@ use Arthedain\HandleMail\Services\ChartService;
 
 class IndexController
 {
-    protected MailService $mailService;
+    protected HandleMailRepository $handleMailRepository;
 
-    public function __construct(MailService $mailService)
+    public function __construct(HandleMailRepository $handleMailRepository)
     {
-        $this->mailService = $mailService;
+        $this->handleMailRepository = $handleMailRepository;
     }
 
     public function getChartData(Request $request, ChartService $chartService)
     {
-        $data = HandleMail::orderBy('id', 'asc')->get();
+        $data = $this->handleMailRepository->getNotSpam();
 
         $period = CarbonPeriod::create($data->first()->created_at, Carbon::now());
 
@@ -32,23 +33,9 @@ class IndexController
         ]);
     }
 
-    //TODO: refactor filter
     public function getMails(Request $request)
     {
-        $mails = HandleMail::orderBy('id', 'desc');
-
-        if ($request->get('from')) {
-            $mails = $mails->from($request->get('from'));
-        }
-
-        if ($request->get('to')) {
-            $mails = $mails->to($request->get('to'));
-        }
-        if ($request->get('search')) {
-            $mails = $mails->search($request->get('search'));
-        }
-
-        $mails = $mails->paginate(20);
+        $mails = $this->handleMailRepository->getPaginated(20, $request->get('from'), $request->get('to'), $request->get('search'));
 
         return response()->json([
             'mails' => $mails->toArray(),
@@ -64,9 +51,9 @@ class IndexController
         ]);
     }
 
-    public function delete(Request $request, string $id)
+    public function delete(Request $request, MailService $mailService)
     {
-        if ($this->mailService->delete($id)) {
+        if ($mailService->delete($request->id)) {
             return response('', 200);
         }
 

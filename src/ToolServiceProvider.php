@@ -80,23 +80,27 @@ class ToolServiceProvider extends ServiceProvider
             __DIR__.'/Mail/HandleMail.php' => app_path('/Mail/HandleMail.php'),
         ], 'mail');
         $this->publishes([
-            __DIR__.'/public/view/' => resource_path('/views/vendor/handle-mail/'),
+            __DIR__.'/../resources/views/' => resource_path('/views/vendor/handle-mail/'),
         ], 'view');
         $this->publishes([
-            __DIR__.'/public/assets/handle-mail.js' => public_path('/assets/handle-mail.js'),
+            __DIR__.'/../assets/handle-mail.js' => public_path('/assets/handle-mail.js'),
         ], 'script');
         $this->publishes([
             __DIR__.'/../config/handle-mail.php' => config_path('handle-mail.php'),
         ], 'config');
         $this->publishes([
-            __DIR__.'/public/migrations/2020_06_30_080754_create_handle_mails_table.php' => database_path('/migrations/2020_06_30_080754_create_handle_mails_table.php'),
+            __DIR__.'/../database/migrations/create_handle_mails_table.php' => database_path('/migrations/'.date('Y_m_d_His', time()).'_create_handle_mails_table.php'),
         ], 'migration');
 
         $this->publishes([
-            __DIR__.'/public/view/mail.blade.php' => resource_path('/views/vendor/handle-mail/mail.blade.php'),
-            __DIR__.'/public/assets/handle-mail.js' => public_path('/assets/handle-mail.js'),
+            __DIR__.'/../resources/views/mail.blade.php' => resource_path('/views/vendor/handle-mail/mail.blade.php'),
+            __DIR__.'/../assets/handle-mail.js' => public_path('/assets/handle-mail.js'),
             __DIR__.'/../config/handle-mail.php' => config_path('handle-mail.php'),
-            __DIR__.'/public/migrations/2020_06_30_080754_create_handle_mails_table.php' => database_path('/migrations/2020_06_30_080754_create_handle_mails_table.php'),
+            __DIR__.'/../database/migrations/create_handle_mails_table.php' => database_path('/migrations/'.date('Y_m_d_His', time()).'_create_handle_mails_table.php'),
         ], 'default');
+
+        $this->publishes([
+            __DIR__.'/../config/honeypot.php' => config_path('honeypot.php'),
+        ], 'config-honeypot');
     }
 }
