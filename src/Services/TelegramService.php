@@ -7,19 +7,18 @@ use Arthedain\HandleMail\Classes\DTO;
 
 class TelegramService
 {
-    private Api $telegram;
-    private string $chat_id;
     protected ConfigService $configService;
 
     public function __construct(ConfigService $configService)
     {
         $this->configService = $configService;
-        $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
-        $this->chat_id = env('TELEGRAM_CHAT_ID');
     }
 
     public function sendMessage(DTO $formDTO)
     {
+        $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
+        $chat_id = env('TELEGRAM_CHAT_ID');
+
         $data = [];
 
         $data['page'] = $formDTO->getPage();
@@ -36,9 +35,9 @@ class TelegramService
 
         $view = $this->getView($data);
 
-        $this->telegram
+        $telegram
             ->setAsyncRequest(true)
-            ->sendMessage(['chat_id' => $this->chat_id, 'text' => $view]);
+            ->sendMessage(['chat_id' => $chat_id, 'text' => $view]);
     }
 
     public function getView(array $data)
