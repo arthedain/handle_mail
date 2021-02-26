@@ -4,8 +4,8 @@
         <card class="flex flex-col m-2">
             <div class="flex">
                 <div class="m-3">
-                    <h2 class="mb-1">Mails</h2>
-                    <h5 class="mr-2">Displays emails were sent from</h5>
+                    <h2 class="mb-1">{{__('Mails')}}</h2>
+                    <h5 class="mr-2">{{__('Displays when emails were sent')}}</h5>
                 </div>
                 <router-link :to="{name: 'handle-mail-metrika-index'}" class="m-3 ml-auto no-underline teal-link flex items-center">
                     <h3 class="text-black teal-link">{{__('View details')}}</h3>

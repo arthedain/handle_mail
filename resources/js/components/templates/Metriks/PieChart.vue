@@ -3,7 +3,8 @@
         <div>
             <div class="flex">
                 <div class="m-3">
-                    <h2 class="mb-1">Countries</h2>
+                    <h2 class="mb-1">{{__('Countries')}}</h2>
+                    <h5>{{__('Countries from which messages were sent')}}</h5>
                 </div>
             </div>
             <div id="piechart"></div>

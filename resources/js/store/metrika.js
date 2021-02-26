@@ -34,7 +34,7 @@ export default {
         },
         updateMetrikaSpamMails(state, mails) {
             mails = _.map(mails, item => {
-                item.created_at = moment(item.created_at).locale('ru').format('LLLL');
+                item.created_at = moment(item.created_at).format("DD-MM-YYYY HH:mm:ss");
                 return item;
             });
             state.metrikaSpamMails = mails;

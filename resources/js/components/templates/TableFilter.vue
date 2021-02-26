@@ -16,37 +16,37 @@
                     name="period"
                     checked
                     ref="allData"
-                ><label for="radio_1" :class="['btn btn-default w-full mt-2 mr-2']">All</label>
+                ><label for="radio_1" :class="['btn btn-default w-full mt-2 mr-2']">{{__('All')}}</label>
                 <input
                     id="radio_2"
                     type="radio"
                     name="period"
                     @change="$emit('change', dayPeriod)"
-                ><label for="radio_2" :class="['btn btn-default w-full mt-2 mr-2']">24 hours</label>
+                ><label for="radio_2" :class="['btn btn-default w-full mt-2 mr-2']">{{__('24 hours')}}</label>
                 <input
                     id="radio_3"
                     type="radio"
                     name="period"
                     @change="$emit('change', weeksPeriod)"
-                ><label for="radio_3" :class="['btn btn-default w-full mt-2 mr-2']">2 weeks</label>
+                ><label for="radio_3" :class="['btn btn-default w-full mt-2 mr-2']">{{__('2 weeks')}}</label>
                 <input
                     id="radio_4"
                     type="radio"
                     name="period"
                     @change="$emit('change', monthPeriod)"
-                ><label for="radio_4" :class="['btn btn-default w-full mt-2 mr-2']">Month</label>
+                ><label for="radio_4" :class="['btn btn-default w-full mt-2 mr-2']">{{__('Month')}}</label>
                 <input
                     id="radio_5"
                     type="radio"
                     name="period"
                     @change="$emit('change', quarterPeriod)"
-                ><label for="radio_5" :class="['btn btn-default w-full mt-2 mr-2']">3 month</label>
+                ><label for="radio_5" :class="['btn btn-default w-full mt-2 mr-2']">{{__('3 month')}}</label>
                 <input
                     id="radio_6"
                     type="radio"
                     name="period"
                     @change="$emit('change', yearPeriod)"
-                ><label for="radio_6" :class="['btn btn-default w-full mt-2 mr-2']">Year</label>
+                ><label for="radio_6" :class="['btn btn-default w-full mt-2 mr-2']">{{__('Year')}}</label>
             </div>
             <dropdown
                 dusk="filter-selector"
@@ -162,11 +162,11 @@
                 this.spam = !this.spam;
 
                 let data = {spam: null};
-                
+
                 if(this.spam) {
                     data = {spam: 0};
                 }
-                
+
                 this.$emit('change', data);
             },
         },

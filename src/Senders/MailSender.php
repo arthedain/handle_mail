@@ -32,7 +32,7 @@ class MailSender implements Sender
 
     public function send(HandleRequest $request, string $subject = 'Request')
     {
-        $content = array_filter($request->except('_token', 'valid_from'));
+        $content = array_filter($request->except('_token', 'valid_from', '/my_name_.*/'));
 
         $formDTO = $request->getDTO();
 

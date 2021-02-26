@@ -3,7 +3,7 @@
         <div class="flex w-full py-4 break-words border-b border-40">
             <div class="w-1/4 py-4">
                 <h4 class="font-normal text-80">
-                    {{ __('Link') }}
+                    {{ __('History') }}
                 </h4>
             </div>
             <div class="w-3/4 py-4 break-words">

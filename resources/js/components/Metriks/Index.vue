@@ -1,12 +1,11 @@
 <template>
     <div>
         <div class="flex mb-6">
-            <router-link :to="{name: 'handle-mail'}">
+            <a class="cursor-pointer" @click="$router.go(-1)">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                    <path fill="#38b2ac" class="heroicon-ui"
-                          d="M5.41 11H21a1 1 0 0 1 0 2H5.41l5.3 5.3a1 1 0 0 1-1.42 1.4l-7-7a1 1 0 0 1 0-1.4l7-7a1 1 0 0 1 1.42 1.4L5.4 11z"/>
+                    <path fill="#38b2ac" class="heroicon-ui" d="M5.41 11H21a1 1 0 0 1 0 2H5.41l5.3 5.3a1 1 0 0 1-1.42 1.4l-7-7a1 1 0 0 1 0-1.4l7-7a1 1 0 0 1 1.42 1.4L5.4 11z"/>
                 </svg>
-            </router-link>
+            </a>
             <p class="text-2xl ml-2 mr-2">/</p>
             <router-link :to="{name: 'handle-mail'}" class="breadcrumb">
                 <h3 class="text-90 font-normal mt-1 breadcrumb ">
@@ -55,8 +54,8 @@
             <card class="w-1/2 flex flex-col mr-2">
                 <div class="flex">
                     <div class="m-3">
-                        <h2 class="mb-1">Map</h2>
-                        <h5 class="">Displays where emails were sent from</h5>
+                        <h2 class="mb-1">{{__('Map')}}</h2>
+                        <h5 class="">{{__('Displays where emails were sent from')}}</h5>
                     </div>
                     <router-link :to="{name: 'handle-mail-metrika-map'}" class="m-3 ml-auto no-underline teal-link flex items-center">
                         <h3 class="text-black teal-link">{{__('View details')}}</h3>
