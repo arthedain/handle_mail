@@ -263,15 +263,13 @@
                   series.tooltipText = "Mails: [bold]{valueY}[/]";
                   series.fillOpacity = 0.3;
 
+                series.stroke = "#14B8A6";
+                series.fill = "#14B8A6";
 
                   chart.cursor = new am4charts.XYCursor();
                   chart.cursor.lineY.opacity = 0;
                   chart.scrollbarX = new am4charts.XYChartScrollbar();
                   chart.scrollbarX.series.push(series);
-
-
-                  dateAxis.start = 0.8;
-                  dateAxis.keepSelection = true;
               }
         },
     }
