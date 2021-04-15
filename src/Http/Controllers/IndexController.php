@@ -24,7 +24,7 @@ class IndexController
     {
         $data = $this->handleMailRepository->getNotSpam();
 
-        $period = CarbonPeriod::create(Carbon::parse($data->first()->created_at), Carbon::now());
+        $period = CarbonPeriod::create(Carbon::parse($data->first()->created_at)->subDay(), Carbon::now()->addDay());
 
         $collection = $chartService->sortData($data, $period, 'mails');
 

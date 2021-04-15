@@ -185,16 +185,6 @@
                         || item.countryName.toLowerCase().includes(this.search.toLowerCase());
                 }).slice(start, end);
             },
-            pieMails() {
-                return this.$store.getters.getMetrikaPieMails;
-            },
-            barMails() {
-                let data = this.$store.getters.getMetrikaBarMails;
-                if (data.length > 5) {
-                    data = _.slice(data, 0, 5);
-                }
-                return data;
-            }
 
         },
         watch: {
